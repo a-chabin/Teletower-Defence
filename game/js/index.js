@@ -100,8 +100,7 @@ BasicGame.Boot.prototype =
             flipped: false
         };
         game.input.mouse.capture = true;
-
-        var barConfig = {x: 150, y: 100};
+        
         this.myHealthBar = new HealthBar(this.game, barConfig);
         this.myHealthBar.setPercent(health); 
     },
