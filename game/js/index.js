@@ -3,42 +3,43 @@ var gameWidth = 1024,
 
 var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'test', null, true, false);
 var health = 100,
-    score = 200,
+    score = 500,
     map = {};
 
 var BasicGame = function (game) { };
 BasicGame.Boot = function (game) { };
 
-var isoGroup, cursorPos, cursor;
+var isoGroup, cursorPos, cursor, healthBar;
 var tiles  = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 
-    0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 0, 0, 
-    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 
-    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 
-    0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 
-    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
+    0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 0, 0, 
+    0, 0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
+    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 
+    0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 
+    0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 
+    0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 
+    0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 
+    0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 
+    0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 0, 
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 ]
 var tileTypes = {
     0: 'grass',
     1: 'road',
+    2: 'grass_active',
     3: 'tower',
     4: 'pickup-burning'
 }
@@ -46,10 +47,7 @@ var mapW = 24;
 var mapH = tiles.length / mapW;
 
 function addActivist(tile) {
-  if (score < 50 || [tile.isoBounds.x, tile.isoBounds.y] in map || tile.key != 'grass') {
-    return;
-  }
-
+  if (score < 50 || [tile.isoBounds.x, tile.isoBounds.y] in map || tile.key != 'grass_active') return;
   score -= 50;
 
   map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
@@ -66,8 +64,10 @@ BasicGame.Boot.prototype =
     preload: function () {
         game.load.image('road', '../img/road.png');
         game.load.image('grass', '../img/grass.png');
+        game.load.image('grass_active', '../img/grass_active.png');
         game.load.image('tower', '../img/tower.png');
         game.load.image('pickup-burning', '../img/pickup-burning.png');
+        game.load.image('devyatka', '../img/devyatka.png');
         game.load.spritesheet('activist', '../img/activist.png', 32, 64, 8);
 
         game.time.advancedTiming = true;
@@ -101,9 +101,9 @@ BasicGame.Boot.prototype =
             animationDuration: 600,
             flipped: false
         };
-        game.input.mouse.capture = true;        
-        this.myHealthBar = new HealthBar(this.game, barConfig);
-        this.myHealthBar.setPercent(health); 
+        game.input.mouse.capture = true;
+        healthBar = new HealthBar(this.game, barConfig);
+        healthBar.setPercent(health);
     },
     update: function () {
         // Update the cursor position.
@@ -118,13 +118,11 @@ BasicGame.Boot.prototype =
             if (!tile.selected && inBounds) {
                 tile.selected = true;
                 tile.tint = 0x86bfda;
-                // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
             // If not, revert back to how it was.
             else if (tile.selected && !inBounds) {
                 tile.selected = false;
                 tile.tint = 0xffffff;
-                // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
 
             if (tile.selected && game.input.activePointer.leftButton.isDown) {
@@ -151,13 +149,17 @@ BasicGame.Boot.prototype =
 
         tile = game.add.isoSprite(78, 450, 0, 'pickup-burning', 0, isoGroup);
         tile.anchor.set(0.5, 1);
-    }
+
+        tile = game.add.isoSprite(140, 30, 0, 'devyatka', 0, isoGroup);
+        tile.anchor.set(0.5, 1);
+
+      }
 };
 
 game.state.add('Boot', BasicGame.Boot);
 game.state.start('Boot');
 
-
+/* Units */
 function Enemy(x, y){
     var self = this;
     this.health = 100;
@@ -187,4 +189,17 @@ function Enemy(x, y){
     this.sprite.update = function() {
         move();
     }
+}
+
+/* Health */
+function hurt(points) {
+    var result = health - points;
+    health = (result >= 0) ? result : 0;
+    healthBar.setPercent(health);
+}
+
+function heal(points) {
+    var result = health - points;
+    health = (result < 100) ? result : 100;
+    healthBar.setPercent(health);
 }
