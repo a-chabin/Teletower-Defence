@@ -1,7 +1,7 @@
 var game = new Phaser.Game(1024, 800, Phaser.AUTO, 'test', null, true, false);
 
 var health = 0;
-var score = 0;
+var score = 200;
 var map = {};
 
 var BasicGame = function (game) { };
@@ -44,10 +44,11 @@ var mapW = 24;
 var mapH = tiles.length / mapW;
 
 function addActivist(tile) {
-  console.log([tile.isoBounds.x, tile.isoBounds.y]);
-  if ([tile.isoBounds.x, tile.isoBounds.y] in map) {
+  if (score < 50 || [tile.isoBounds.x, tile.isoBounds.y] in map || tile.key != 'grass') {
     return;
   }
+
+  score -= 50;
 
   map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
 
