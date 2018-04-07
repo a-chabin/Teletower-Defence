@@ -39,6 +39,8 @@ var tileTypes = {
     1: 'road',
     3: 'tower',
 }
+var mapW = 24;
+var mapH = tiles.length / mapW;
 
 BasicGame.Boot.prototype =
 {
@@ -98,12 +100,12 @@ BasicGame.Boot.prototype =
       },
     spawnTiles: function () {
         var tile;
-        for (var xx = 0; xx < 24; xx += 1) {
-            for (var yy = 0; yy < 24; yy += 1) {
+        for (var i = 0; i < mapH; i += 1) {
+            for (var j = 0; j < mapW; j += 1) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
-                var type = tiles[(xx+1)*24-(yy+1)];
-                tile = game.add.isoSprite(xx * 19, yy * 19, 0, tileTypes[type], 0, isoGroup);
+                var type = tiles[(i+1)*mapW-(j+1)];
+                tile = game.add.isoSprite(i * 19, j * 19, 0, tileTypes[type], 0, isoGroup);
                 tile.anchor.set(0.5, 1);
             }
         }
