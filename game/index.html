@@ -15,7 +15,7 @@
 
   </head>
   <body>
-    <article>
+    <article id="start-screen">
       <section>
         <h1>Teletower Defence</h1>
         <p>Эта игра посвящена недостроенной Телебашне в центре Екатеринбурга.</p>
@@ -26,24 +26,39 @@
           Используй все доступные способы, чтобы отстоять башню!</p>
         <p>Все персонажи вымышлены, все совпадения случайны. 
         Основано на реальных событиях.</p>
-        <button class="button-primary" onclick="start()" autofocus>Начать игру</button>
+        <button onclick="start()" autofocus tabindex="0">Начать игру</button>
       </section>
     </article>
-    <div div="game"></div>
-    <script>
-    function start() {
-      document.dispatchEvent(new CustomEvent('startGame'));
-      document.querySelector('article').remove();
-      var audio = new Audio('./audio/karliki.mp3');
-      audio.play();
-    }
+    <article id="end-screen" class="hide">
+      <h1>Game over</h1>
+      <div id="video"></div>
+      <button onclick="start()" tabindex="0">Начать заново</button>
+    </article>
 
-    function end() {
-      document.dispatchEvent(new CustomEvent('startGame'));
-      document.querySelector('article').remove();
-      var audio = new Audio('./audio/karliki.mp3');
-      audio.play();
-    }
+    <script>
+      var startScreen = document.getElementById('start-screen'),
+          endScreen = document.getElementById('end-screen'),
+          audio = new Audio('./audio/karliki.mp3'),
+          videoContainer = document.getElementById('video'),
+          youtube = document.createElement('iframe');
+          youtube.src = "https://www.youtube.com/embed/y_RCM37Ba7w?autoplay=1&amp;rel=0&amp;controls=0&amp;showinfo=0&amp;start=20";
+          youtube.width = 800;
+          youtube.height = 450;
+          youtube.frameBorder = 0;
+          youtube.allow = "autoplay; encrypted-media";
+
+      function start() {
+        document.dispatchEvent(new CustomEvent('startGame'));
+        startScreen.className = 'hide';
+        endScreen.className = 'hide';
+        audio.play();
+      }
+
+      function end() {
+        videoContainer.appendChild(youtube);
+        startScreen.className = 'hide';
+        endScreen.className = '';
+      }
     </script>
   </body>
 </html>

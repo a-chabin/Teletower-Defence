@@ -200,6 +200,10 @@ BasicGame.Boot.prototype =
               addActivist(tile);
             }
         });
+
+        if (health <= 0) {
+            end();
+        }
     },
     render: function () {
         game.debug.text(health + " / 100" || '--', gameWidth - 290, 44, "#fff");
