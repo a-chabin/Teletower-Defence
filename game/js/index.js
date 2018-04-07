@@ -70,6 +70,8 @@ var skills = {
     'button': null
   }
 };
+var enemies = [];
+var defenders = [];
 
 function skillIsAvailable(name) {
   return (Date.now() - skills[name].last_used > 30 * 1000) && score >= skills[name].price;
@@ -97,16 +99,7 @@ function buyRoizman() {
 }
 
 function addActivist(tile) {
-  if (score < 50 || [tile.isoBounds.x, tile.isoBounds.y] in map || tile.key != 'grass_active') return;
-  score -= 50;
-
-  map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
-
-  tile = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 8, isoGroup);
-  tile.anchor.set(0.5, 1);
-
-  anim = tile.animations.add('post');
-  anim.play(3, true);
+  
 }
 
 var water = [];
@@ -164,7 +157,7 @@ BasicGame.Boot.prototype =
         game.input.mouse.capture = true;
         healthBar = new HealthBar(this.game, barConfig);
         healthBar.setPercent(health);
-        // window.e = new Enemy(100,200);
+        window.e = spawnEnemy('thief');
 
         skills['roofers']['button'] = game.add.button(160, 55, 'buy', buyRoofers, this, 2, 1, 0);
         skills['obnimashki']['button'] = game.add.button(160, 85, 'buy', buyObnimashki, this, 2, 1, 0);
@@ -197,7 +190,10 @@ BasicGame.Boot.prototype =
             }
 
             if (tile.selected && game.input.activePointer.leftButton.isDown) {
-              addActivist(tile);
+                if (score >= 50 && !([tile.isoBounds.x, tile.isoBounds.y] in map) && tile.key == 'grass_active'){
+                    score -= 50;
+                    new Defender(tile);
+                }
             }
         });
 
@@ -253,7 +249,7 @@ BasicGame.Boot.prototype =
         tile.anchor.set(0.5, 0.5);
         tile = game.add.isoSprite(400, 45, 0, 'tree2', 0, isoGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(460, 290, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(520, 290, 0, 'tree2', 0, isoGroup);
         tile.anchor.set(0.5, 1);
       }
 };
@@ -262,12 +258,14 @@ game.state.add('Boot', BasicGame.Boot);
 game.state.start('Boot');
 
 function addThiefSprite(x, y) {
-  tile = game.add.isoSprite(x, y, 0, 'thief', 28, isoGroup);
+  tile = game.add.sprite(x, y, 'thief', 28);
   tile.width = 24;
   tile.height = 36;
   tile.anchor.set(1, 1);
   anim = tile.animations.add('walk');
   anim.play(10, true);
+
+  return tile;
 }
 
 /* Units */
@@ -290,28 +288,28 @@ function Enemy(x, y, type){
             x: target.x - self.sprite.x,
             y: target.y - self.sprite.y,
         }
-        var len = Math.sqrt(vec.x*vec.x + vec.y*vec.y);
+        var len = distance(target, self.sprite)
         if(len > self.speed){
             self.sprite.x += vec.x * self.speed / len;
             self.sprite.y += vec.y * self.speed / len;
         }
     };
-    var kill = function(){
-        hurt(self.damage);
+    var destroy = function(){
+        var idx = enemies.indexOf(self);
+        if(idx!=-1){
+            enemies.splice(idx, 1);
+        }
         self.sprite.destroy();
     };
     var getTarget = function(){
-        var vec = {
-            x: target.x - self.sprite.x,
-            y: target.y - self.sprite.y,
-        }
-        var len = Math.sqrt(vec.x*vec.x + vec.y*vec.y);
+        var len = distance(target, self.sprite)
         if(len <= self.speed){
             path.shift();
             target = path[0] || target;
         }
         if(path.length==0){
-            kill();
+            destroy();
+            hurt(self.damage);
         }
     };
 
@@ -319,11 +317,65 @@ function Enemy(x, y, type){
         target.x = x;
         target.y = y;
     };
+    this.hurt = function(points) {
+        var result = self.health - points;
+        self.health = (result >= 0) ? result : 0;
+        if(self.health==0){
+            destroy();
+        }
+        console.log(result);
+    }
     this.sprite.update = function() {
         getTarget();
         move();
     }
+    enemies.push(this);
 }
+
+function Defender(tile){
+    var self = this;
+    map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
+    this.damage = 10;
+    this.radius = 30;
+    this.sprite = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 8, isoGroup);
+    this.sprite.anchor.set(0.5, 1);
+
+    var anim = this.sprite.animations.add('post');
+    var target;
+    var destroy = function(){
+        var idx = defenders.indexOf(self);
+        if(idx!=-1){
+            defenders.splice(idx, 1);
+        }
+        self.sprite.destroy();
+    };
+    var attack = function(){
+        if(target){
+            target.hurt(self.damage);
+            anim.play(3, true);
+        }
+    };
+    var getTarget = function(){
+        anim.stop();
+        var dist;
+        target = undefined;
+        for (var i = 0; i < enemies.length; i++) {
+            dist = distance(enemies[i].sprite, self.sprite);
+            if(dist < self.radius){
+                if(!target || dist < distance(target.sprite, self.sprite)){
+                    target = enemies[i];
+                }
+            }
+        }
+        anim.stop(!target);
+    };
+    this.sprite.update = function() {
+        getTarget();
+        attack();
+    }
+    defenders.push(this);
+}
+
 
 /* Health */
 function hurt(points) {
@@ -339,8 +391,17 @@ function heal(points) {
 }
 
 function spawnEnemy(type){
-    new Enemy(mapRoad[0].x,mapRoad[0].y, type);
+    return new Enemy(mapRoad[0].x,mapRoad[0].y, type);
 }
 function startGame(){
     console.log("start");
+}
+
+
+function distance(vec1, vec2) {
+    var vec = {
+        x: vec1.x - vec2.x,
+        y: vec1.y - vec2.y,
+    }
+    return Math.sqrt(vec.x*vec.x + vec.y*vec.y);
 }
