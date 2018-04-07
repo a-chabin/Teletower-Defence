@@ -40,6 +40,7 @@ var tileTypes = {
     0: 'grass',
     1: 'road',
     3: 'tower',
+    4: 'pickup-burning'
 }
 var mapW = 24;
 var mapH = tiles.length / mapW;
@@ -53,8 +54,11 @@ function addActivist(tile) {
 
   map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
 
-  tile = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 0, isoGroup);
+  tile = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 8, isoGroup);
   tile.anchor.set(0.5, 1);
+
+  anim = tile.animations.add('post');
+  anim.play(3, true);
 }
 
 BasicGame.Boot.prototype =
@@ -63,7 +67,8 @@ BasicGame.Boot.prototype =
         game.load.image('road', '../img/road.png');
         game.load.image('grass', '../img/grass.png');
         game.load.image('tower', '../img/tower.png');
-        game.load.image('activist', '../img/activist.png');
+        game.load.image('pickup-burning', '../img/pickup-burning.png');
+        game.load.spritesheet('activist', '../img/activist.png', 32, 64, 8);
 
         game.time.advancedTiming = true;
         game.plugins.add(new Phaser.Plugin.Isometric(game));
@@ -96,8 +101,7 @@ BasicGame.Boot.prototype =
             animationDuration: 600,
             flipped: false
         };
-        game.input.mouse.capture = true;
-        
+        game.input.mouse.capture = true;        
         this.myHealthBar = new HealthBar(this.game, barConfig);
         this.myHealthBar.setPercent(health); 
     },
@@ -144,6 +148,9 @@ BasicGame.Boot.prototype =
                 tile.anchor.set(0.5, 1);
             }
         }
+
+        tile = game.add.isoSprite(78, 450, 0, 'pickup-burning', 0, isoGroup);
+        tile.anchor.set(0.5, 1);
     }
 };
 
