@@ -337,7 +337,7 @@ function Enemy(x, y, type){
     this.hurt = function(points) {
         var result = self.health - points;
         self.health = (result >= 0) ? result : 0;
-        if(self.health==0){
+        if(self.health<=0){
             destroy();
         }
         console.log(result);
