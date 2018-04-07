@@ -168,6 +168,8 @@ BasicGame.Boot.prototype =
         skills['roofers']['button'] = game.add.button(160, 55, 'buy', buyRoofers, this, 2, 1, 0);
         skills['obnimashki']['button'] = game.add.button(160, 85, 'buy', buyObnimashki, this, 2, 1, 0);
         skills['roizman']['button'] = game.add.button(160, 115, 'buy', buyRoizman, this, 2, 1, 0);
+
+        document.addEventListener("startGame", startGame);
       },
     update: function () {
         // Update the cursor position.
@@ -322,4 +324,8 @@ function heal(points) {
 
 function spawnEnemy(){
     new Enemy(mapRoad[0].x,mapRoad[0].y);
+}
+
+function startGame(){
+    console.log("start");
 }

@@ -25,7 +25,7 @@
           Используй все доступные способы, чтобы отстоять башню!</p>
         <p>Все персонажи вымышлены, все совпадения случайны. 
         Основано на реальных событиях.</p>
-        <button class="button-primary" onclick="document.querySelector('article').remove()">Начать игру</button>
+        <button class="button-primary" onclick="document.dispatchEvent(new CustomEvent('startGame'));document.querySelector('article').remove();">Начать игру</button>
       </section>
     </article>
     <div div="game"></div>
