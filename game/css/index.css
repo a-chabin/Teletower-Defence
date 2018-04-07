@@ -37,6 +37,8 @@ article {
 body {
 	font-family: 'IBM Plex Mono', monospace;
 	position: relative;
+	min-width: 1024px;
+	overflow: hidden;
 }
 
 article {
@@ -51,6 +53,17 @@ article {
 	text-align: center;
     background: rgba(0, 0, 0, 0.5);
     text-shadow: 1px 2px 0 #000;
+}
+
+article:before {
+    position: absolute;
+    content: '';
+    height: 190px;
+    width: 300px;
+    background: #7f7f7f;
+    margin-left: -365px;
+    margin-top: -250px;
+    box-shadow: 612px -106px 0 #7f7f7f;
 }
 
 article ~ canvas {
@@ -101,11 +114,11 @@ button:active {
 }
 
 ::selection {
-    background: #3d8819;
+    background: #41922d;
     color: #fff;
 }
 
 ::-moz-selection {
-    background: #3d8819;
+    background: #41922d;
     color: #fff;
 }
