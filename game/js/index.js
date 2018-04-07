@@ -1,10 +1,11 @@
-var game = new Phaser.Game(1024, 800, Phaser.AUTO, 'test', null, true, false);
+var gameWidth = 1024,
+    gameHeight = 800,
+    health = 60,
+    score = 0;
 
-var health = 0;
-var score = 0;
+var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'test', null, true, false);
 
 var BasicGame = function (game) { };
-
 BasicGame.Boot = function (game) { };
 
 var isoGroup, cursorPos, cursor;
@@ -65,8 +66,22 @@ BasicGame.Boot.prototype =
         // Provide a 3D position for the cursor
         cursorPos = new Phaser.Plugin.Isometric.Point3();
 
-        var barConfig = {x: 150, y: 100};
+        var barConfig = {
+            width: 250,
+            height: 20,
+            x: gameWidth - 250,
+            y: 40,
+            bg: {
+              color: '#F5F5F5'
+            },
+            bar: {
+              color: '#D9534F'
+            },
+            animationDuration: 600,
+            flipped: false
+        };
         this.myHealthBar = new HealthBar(this.game, barConfig);
+        this.myHealthBar.setPercent(health); 
     },
     update: function () {
         // Update the cursor position.
@@ -93,7 +108,7 @@ BasicGame.Boot.prototype =
     },
     render: function () {
         game.debug.text(game.time.fps || '--', 2, 14, "#a7aebe");
-        game.debug.text(health + " / 100" || '--', 2, 36, "#a7aebe");
+        game.debug.text(health + " / 100" || '--', gameWidth - 290, 44, "#fff");
         game.debug.text("$ " + score || '--', 2, 54, "#a7aebe");
       },
     spawnTiles: function () {
