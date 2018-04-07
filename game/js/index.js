@@ -46,6 +46,8 @@ var tileTypes = {
 var mapW = 24;
 var mapH = tiles.length / mapW;
 
+var mapRoad = [{x:460, y:595}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:461, y:526}, {x:461, y:526}, {x:461, y:526}, {x:461, y:526}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}]
+
 function addActivist(tile) {
   if (score < 50 || [tile.isoBounds.x, tile.isoBounds.y] in map || tile.key != 'grass_active') return;
   score -= 50;
@@ -83,6 +85,7 @@ BasicGame.Boot.prototype =
 
         // Let's make a load of tiles on a grid.
         this.spawnTiles();
+        new Enemy(mapRoad[0].x,mapRoad[0].y)
 
         // Provide a 3D position for the cursor
         cursorPos = new Phaser.Plugin.Isometric.Point3();
@@ -134,6 +137,7 @@ BasicGame.Boot.prototype =
         game.debug.text(game.time.fps || '--', 2, 14, "#a7aebe");
         game.debug.text(health + " / 100" || '--', gameWidth - 290, 44, "#fff");
         game.debug.text("Деньги госдепа: $ " + score || '--', 2, 54, "#a7aebe");
+        //game.debug.text(game.input.activePointer.position.x +" "+game.input.activePointer.position.y, 2, 74, "#a7aebe");
       },
     spawnTiles: function () {
         var tile;
@@ -163,10 +167,11 @@ game.state.start('Boot');
 function Enemy(x, y){
     var self = this;
     this.health = 100;
-    this.speed = 0.5;
+    this.speed = 1;
     this.sprite = game.add.sprite(x, y, 'activist');
     this.sprite.anchor.set(0.5, 1);
-    var target = {
+    var path = mapRoad.slice();
+    var target = path[0] || {
         x: x,
         y: y,
     };
@@ -180,13 +185,28 @@ function Enemy(x, y){
             self.sprite.x += vec.x * self.speed / len;
             self.sprite.y += vec.y * self.speed / len;
         }
-
     };
+    var getTarget = function(){
+        var vec = {
+            x: target.x - self.sprite.x,
+            y: target.y - self.sprite.y,
+        }
+        var len = Math.sqrt(vec.x*vec.x + vec.y*vec.y);
+        if(len <= self.speed){
+            path.shift();
+            target = path[0] || target;
+        }
+        if(path.length==0){
+            self.sprite.destroy();
+        }
+    };
+
     this.moveTo = function(x, y){
         target.x = x;
         target.y = y;
     };
     this.sprite.update = function() {
+        getTarget();
         move();
     }
 }
