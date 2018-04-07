@@ -3,7 +3,7 @@ var gameWidth = 1024,
 
 var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'test', null, true, false);
 var health = 100,
-    score = 500,
+    score = 5000,
     map = {};
 
 var BasicGame = function (game) { };
@@ -48,6 +48,49 @@ var mapH = tiles.length / mapW;
 
 var mapRoad = [{x:460, y:595}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:461, y:526}, {x:461, y:526}, {x:461, y:526}, {x:461, y:526}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}]
 
+var skills = {
+  'roofers': {
+    'price': 1000,
+    'last_used': null,
+    'button': null
+  },
+  'obnimashki': {
+    'price': 2000,
+    'last_used': null,
+    'button': null
+  },
+  'roizman': {
+    'price': 5000,
+    'last_used': null,
+    'button': null
+  }
+};
+
+function skillIsAvailable(name) {
+  return (Date.now() - skills[name].last_used > 30 * 1000) && score >= skills[name].price;
+}
+
+function buy(skill) {
+  var skill_data = skills[skill];
+  var price = skill_data.price;
+
+  if (score < price) return;
+  score -= price;
+  skill_data.last_used = Date.now();
+}
+
+function buyRoofers() {
+  buy('roofers');
+}
+
+function buyObnimashki() {
+  buy('obnimashki');
+}
+
+function buyRoizman() {
+  buy('roizman');
+}
+
 function addActivist(tile) {
   if (score < 50 || [tile.isoBounds.x, tile.isoBounds.y] in map || tile.key != 'grass_active') return;
   score -= 50;
@@ -64,6 +107,7 @@ function addActivist(tile) {
 BasicGame.Boot.prototype =
 {
     preload: function () {
+        game.load.image('buy', '../img/buy.png');
         game.load.image('road', '../img/road.png');
         game.load.image('grass', '../img/grass.png');
         game.load.image('grass_active', '../img/grass_active.png');
@@ -107,7 +151,11 @@ BasicGame.Boot.prototype =
         game.input.mouse.capture = true;
         healthBar = new HealthBar(this.game, barConfig);
         healthBar.setPercent(health);
-    },
+        // window.e = new Enemy(100,200);
+        skills['roofers']['button'] = game.add.button(160, 55, 'buy', buyRoofers, this, 2, 1, 0);
+        skills['obnimashki']['button'] = game.add.button(160, 85, 'buy', buyObnimashki, this, 2, 1, 0);
+        skills['roizman']['button'] = game.add.button(160, 115, 'buy', buyRoizman, this, 2, 1, 0);
+      },
     update: function () {
         // Update the cursor position.
         // It's important to understand that screen-to-isometric projection means you have to specify a z position manually, as this cannot be easily
@@ -134,10 +182,16 @@ BasicGame.Boot.prototype =
         });
     },
     render: function () {
-        game.debug.text(game.time.fps || '--', 2, 14, "#a7aebe");
         game.debug.text(health + " / 100" || '--', gameWidth - 290, 44, "#fff");
-        game.debug.text("Деньги госдепа: $ " + score || '--', 2, 54, "#a7aebe");
-        //game.debug.text(game.input.activePointer.position.x +" "+game.input.activePointer.position.y, 2, 74, "#a7aebe");
+        game.debug.text("Деньги госдепа: $ " + score || '--', 2, 44, "#a7aebe");
+
+        game.debug.text("Руферы: $1000" || '--', 2, 70, "#a7aebe");
+        game.debug.text("Обнимашки: $2000" || '--', 2, 100, "#a7aebe");
+        game.debug.text("Ройзман: $5000" || '--', 2, 130, "#a7aebe");
+
+        for (skill in skills) {
+          skills[skill].button.visible = skillIsAvailable(skill);
+        }
       },
     spawnTiles: function () {
         var tile;
