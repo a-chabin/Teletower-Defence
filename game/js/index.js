@@ -3,7 +3,7 @@ var gameWidth = 1024,
 
 var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'test', null, true, false);
 var health = 100,
-    score = 500,
+    score = 5000,
     map = {};
 
 var BasicGame = function (game) { };
@@ -14,37 +14,88 @@ var tiles  = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 
-    0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
-    0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 
-    0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 
-    0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
+    0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 0, 0, 
+    0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
+    0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 
+    0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 
     0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 
     0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 
     0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 
-    0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 
-    0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 
-    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 0, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-]
+    0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 
+    0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 0, 0, 
+    0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 
+    0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 
+    0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+    4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+    4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  ]
 var tileTypes = {
     0: 'grass',
     1: 'road',
     2: 'grass_active',
     3: 'tower',
-    4: 'pickup-burning'
+    4: 'water'
 }
 var mapW = 24;
 var mapH = tiles.length / mapW;
+
+var mapRoad = [{x:460, y:595}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:461, y:526}, {x:461, y:526}, {x:461, y:526}, {x:461, y:526}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}]
+
+var skills = {
+  'roofers': {
+    'price': 1000,
+    'last_used': null,
+    'button': null
+  },
+  'obnimashki': {
+    'price': 2000,
+    'last_used': null,
+    'button': null
+  },
+  'roizman': {
+    'price': 5000,
+    'last_used': null,
+    'button': null
+  }
+};
+
+function skillIsAvailable(name) {
+  return (Date.now() - skills[name].last_used > 30 * 1000) && score >= skills[name].price;
+}
+
+function buy(skill) {
+  var skill_data = skills[skill];
+  var price = skill_data.price;
+
+  if (score < price) return;
+  score -= price;
+  skill_data.last_used = Date.now();
+}
+
+function buyRoofers() {
+  buy('roofers');
+}
+
+function buyObnimashki() {
+  buy('obnimashki');
+}
+
+function buyRoizman() {
+  buy('roizman');
+}
 
 function addActivist(tile) {
   if (score < 50 || [tile.isoBounds.x, tile.isoBounds.y] in map || tile.key != 'grass_active') return;
@@ -59,12 +110,18 @@ function addActivist(tile) {
   anim.play(3, true);
 }
 
+var water = [];
+
 BasicGame.Boot.prototype =
 {
     preload: function () {
+        game.load.image('buy', '../img/buy.png');
+        game.load.image('tree1', '../img/tree1.png');
+        game.load.image('tree2', '../img/tree2.png');
         game.load.image('road', '../img/road.png');
         game.load.image('grass', '../img/grass.png');
         game.load.image('grass_active', '../img/grass_active.png');
+        game.load.image('water', '../img/water.png');
         game.load.image('tower', '../img/tower.png');
         game.load.image('pickup-burning', '../img/pickup-burning.png');
         game.load.image('devyatka', '../img/devyatka.png');
@@ -73,6 +130,7 @@ BasicGame.Boot.prototype =
         game.time.advancedTiming = true;
         game.plugins.add(new Phaser.Plugin.Isometric(game));
 
+        game.physics.startSystem(Phaser.Plugin.Isometric.ISOARCADE);
         // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
         // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
         game.iso.anchor.setTo(0.5, 0.3);
@@ -80,6 +138,8 @@ BasicGame.Boot.prototype =
     create: function () {
         // Create a group for our tiles.
         isoGroup = game.add.group();
+        isoGroup.enableBody = true;
+        isoGroup.physicsBodyType = Phaser.Plugin.Isometric.ISOARCADE;
 
         // Let's make a load of tiles on a grid.
         this.spawnTiles();
@@ -105,18 +165,25 @@ BasicGame.Boot.prototype =
         healthBar = new HealthBar(this.game, barConfig);
         healthBar.setPercent(health);
         // window.e = new Enemy(100,200);
-    },
+        skills['roofers']['button'] = game.add.button(160, 55, 'buy', buyRoofers, this, 2, 1, 0);
+        skills['obnimashki']['button'] = game.add.button(160, 85, 'buy', buyObnimashki, this, 2, 1, 0);
+        skills['roizman']['button'] = game.add.button(160, 115, 'buy', buyRoizman, this, 2, 1, 0);
+      },
     update: function () {
         // Update the cursor position.
         // It's important to understand that screen-to-isometric projection means you have to specify a z position manually, as this cannot be easily
         // determined from the 2D pointer position without extra trickery. By default, the z position is 0 if not set.
         game.iso.unproject(game.input.activePointer.position, cursorPos);
 
+        water.forEach(function (w) {
+          w.isoZ = -1 + (-1 * Math.sin((game.time.now + (w.isoX * 5)) * 0.004)) + (-1 * Math.sin((game.time.now + (w.isoY * 8)) * 0.005));
+          w.alpha = Phaser.Math.clamp(1 + (w.isoZ * 0.1), 0.1, 1);
+        });
         // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.
         isoGroup.forEach(function (tile) {
             var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
             // If it does, do a little animation and tint change.
-            if (!tile.selected && inBounds) {
+            if (!tile.selected && inBounds && tile.key=="grass_active") {
                 tile.selected = true;
                 tile.tint = 0x86bfda;
             }
@@ -128,15 +195,20 @@ BasicGame.Boot.prototype =
 
             if (tile.selected && game.input.activePointer.leftButton.isDown) {
               addActivist(tile);
-              // window.e.target.x=game.input.activePointer.position.x;
-              // window.e.target.y=game.input.activePointer.position.y;
             }
         });
     },
     render: function () {
-        game.debug.text(game.time.fps || '--', 2, 14, "#a7aebe");
         game.debug.text(health + " / 100" || '--', gameWidth - 290, 44, "#fff");
-        game.debug.text("Деньги госдепа: $ " + score || '--', 2, 54, "#a7aebe");
+        game.debug.text("Деньги госдепа: $ " + score || '--', 2, 44, "#a7aebe");
+
+        game.debug.text("Руферы: $1000" || '--', 2, 70, "#a7aebe");
+        game.debug.text("Обнимашки: $2000" || '--', 2, 100, "#a7aebe");
+        game.debug.text("Ройзман: $5000" || '--', 2, 130, "#a7aebe");
+
+        for (skill in skills) {
+          skills[skill].button.visible = skillIsAvailable(skill);
+        }
       },
     spawnTiles: function () {
         var tile;
@@ -147,15 +219,43 @@ BasicGame.Boot.prototype =
                 var type = tiles[(i+1)*mapW-(j+1)];
                 tile = game.add.isoSprite(i * 19, j * 19, 0, tileTypes[type], 0, isoGroup);
                 tile.anchor.set(0.5, 1);
+
+                if (type === 4) {
+                  water.push(tile);
+                }
             }
         }
 
         tile = game.add.isoSprite(78, 450, 0, 'pickup-burning', 0, isoGroup);
         tile.anchor.set(0.5, 1);
-
         tile = game.add.isoSprite(140, 30, 0, 'devyatka', 0, isoGroup);
         tile.anchor.set(0.5, 1);
-
+        tile = game.add.isoSprite(35, 350, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(15, 200, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(345, -25, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(190, -25, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(90, 400, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(260, -25, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(280, -25, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(300, -25, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(350, 40, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(310, 400, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(390, -25, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(400, 45, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(400, 240, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
       }
 };
 
@@ -163,37 +263,56 @@ game.state.add('Boot', BasicGame.Boot);
 game.state.start('Boot');
 
 /* Units */
-function Enemy(x,y){
+function Enemy(x, y){
     var self = this;
     this.health = 100;
     this.speed = 1;
+    this.damage = 10;
     this.sprite = game.add.sprite(x, y, 'activist');
     this.sprite.anchor.set(0.5, 1);
-    this.target = {
+    var path = mapRoad.slice();
+    var target = path[0] || {
         x: x,
         y: y,
     };
-    this.move = function(){
+    var move = function(){
         var vec = {
-            x: this.target.x,
-            y: this.target.y,
+            x: target.x - self.sprite.x,
+            y: target.y - self.sprite.y,
         }
-        vec.x -= self.sprite.x;
-        vec.y -= self.sprite.y;
         var len = Math.sqrt(vec.x*vec.x + vec.y*vec.y);
-
-        if(len > 1){
-            vec.x = vec.x/len;
-            vec.y = vec.y/len;
-            self.sprite.x += vec.x*self.speed;
-            self.sprite.y += vec.y*self.speed;
+        if(len > self.speed){
+            self.sprite.x += vec.x * self.speed / len;
+            self.sprite.y += vec.y * self.speed / len;
         }
+    };
+    var kill = function(){
+        hurt(self.damage);
+        self.sprite.destroy();
+    };
+    var getTarget = function(){
+        var vec = {
+            x: target.x - self.sprite.x,
+            y: target.y - self.sprite.y,
+        }
+        var len = Math.sqrt(vec.x*vec.x + vec.y*vec.y);
+        if(len <= self.speed){
+            path.shift();
+            target = path[0] || target;
+        }
+        if(path.length==0){
+            kill();
+        }
+    };
 
+    this.moveTo = function(x, y){
+        target.x = x;
+        target.y = y;
     };
     this.sprite.update = function() {
-        self.move();
+        getTarget();
+        move();
     }
-
 }
 
 /* Health */
@@ -207,4 +326,8 @@ function heal(points) {
     var result = health - points;
     health = (result < 100) ? result : 100;
     healthBar.setPercent(health);
+}
+
+function spawnEnemy(){
+    new Enemy(mapRoad[0].x,mapRoad[0].y);
 }
