@@ -15,9 +15,6 @@
 
   </head>
   <body>
-    <audio controls>
-        <source src="./audio/karliki.mp3" type="audio/mp3">
-    </audio>
     <article>
       <section>
         <h1>Teletower Defence</h1>
@@ -29,9 +26,17 @@
           Используй все доступные способы, чтобы отстоять башню!</p>
         <p>Все персонажи вымышлены, все совпадения случайны. 
         Основано на реальных событиях.</p>
-        <button class="button-primary" onclick="document.dispatchEvent(new CustomEvent('startGame'));document.querySelector('article').remove();">Начать игру</button>
+        <button class="button-primary" onclick="start()">Начать игру</button>
       </section>
     </article>
     <div div="game"></div>
+    <script>
+    function start() {
+      document.dispatchEvent(new CustomEvent('startGame'));
+      document.querySelector('article').remove();
+      var audio = new Audio('./audio/karliki.mp3');
+      audio.play();
+    }
+    </script>
   </body>
 </html>
