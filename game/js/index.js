@@ -1,5 +1,5 @@
 var gameWidth = 1024,
-    gameHeight = 800;
+    gameHeight = 650;
 
 var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'test', null, true, false);
 var health = 100,
