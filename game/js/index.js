@@ -32,6 +32,9 @@ BasicGame.Boot.prototype =
 
         // Provide a 3D position for the cursor
         cursorPos = new Phaser.Plugin.Isometric.Point3();
+
+        var barConfig = {x: 150, y: 100};
+        this.myHealthBar = new HealthBar(this.game, barConfig);
     },
     update: function () {
         // Update the cursor position.
