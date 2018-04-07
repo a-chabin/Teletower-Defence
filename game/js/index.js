@@ -46,13 +46,13 @@ BasicGame.Boot.prototype =
             if (!tile.selected && inBounds) {
                 tile.selected = true;
                 tile.tint = 0x86bfda;
-                game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
+                // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
             // If not, revert back to how it was.
             else if (tile.selected && !inBounds) {
                 tile.selected = false;
                 tile.tint = 0xffffff;
-                game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
+                // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
         });
     },
@@ -72,7 +72,7 @@ BasicGame.Boot.prototype =
             }
         }
 
-        tile = game.add.isoSprite(-72, -72, 0, 'tower', 0, isoGroup);
+        tile = game.add.isoSprite(-38, -38, 0, 'tower', 0, isoGroup);
         tile.anchor.set(0.5, 0.5);
     }
 };
