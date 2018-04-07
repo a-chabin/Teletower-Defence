@@ -129,7 +129,6 @@ BasicGame.Boot.prototype =
 
         // Let's make a load of tiles on a grid.
         this.spawnTiles();
-        new Enemy(mapRoad[0].x,mapRoad[0].y)
 
         // Provide a 3D position for the cursor
         cursorPos = new Phaser.Plugin.Isometric.Point3();
@@ -222,6 +221,7 @@ function Enemy(x, y){
     var self = this;
     this.health = 100;
     this.speed = 1;
+    this.damage = 10;
     this.sprite = game.add.sprite(x, y, 'activist');
     this.sprite.anchor.set(0.5, 1);
     var path = mapRoad.slice();
@@ -240,6 +240,10 @@ function Enemy(x, y){
             self.sprite.y += vec.y * self.speed / len;
         }
     };
+    var kill = function(){
+        hurt(self.damage);
+        self.sprite.destroy();
+    };
     var getTarget = function(){
         var vec = {
             x: target.x - self.sprite.x,
@@ -251,7 +255,7 @@ function Enemy(x, y){
             target = path[0] || target;
         }
         if(path.length==0){
-            self.sprite.destroy();
+            kill();
         }
     };
 
@@ -276,4 +280,8 @@ function heal(points) {
     var result = health - points;
     health = (result < 100) ? result : 100;
     healthBar.setPercent(health);
+}
+
+function spawnEnemy(){
+    new Enemy(mapRoad[0].x,mapRoad[0].y);
 }
