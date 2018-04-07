@@ -59,6 +59,7 @@ var skills = {
     'last_used': null,
     'button': null,
     'timer_coords': [240, 70],
+    'sprite': null
   },
   'obnimashki': {
     'price': 2000,
@@ -82,7 +83,7 @@ function skillIsAvailable(name) {
 
 function skillIsActive(name) {
   if (skills[name].last_used != null) {
-    return (Date.now() - skills[name].last_used) < 30 * 1000;
+    return (Date.now() - skills[name].last_used) < 5 * 1000;
   }
   return false;
 }
@@ -125,6 +126,7 @@ BasicGame.Boot.prototype =
         game.load.image('grass_active', '../img/grass_active.png');
         game.load.image('water', '../img/water.png');
         game.load.image('tower', '../img/tower.png');
+        game.load.image('tower-flag', '../img/tower-flag.png');
         game.load.image('pickup-burning', '../img/pickup-burning.png');
         game.load.image('devyatka', '../img/devyatka.png');
         game.load.spritesheet('activist', '../img/activist.png', 32, 64, 8);
@@ -226,10 +228,24 @@ BasicGame.Boot.prototype =
           skills[skill].button.visible = skillIsAvailable(skill);
 
           if (skillIsActive(skill) && skills[skill].last_used != null) {
+            if (skill === 'roofers') {
+              if (skills[skill].sprite != null) {
+                skills[skill].sprite.visible = true;
+              } else {
+                tile = game.add.isoSprite(76, 76, 0, 'tower-flag', 0, isoGroup);
+                tile.anchor.set(0.5, 1);
+                skills[skill].sprite = tile;
+              }
+            }
+
             var x = skills[skill].timer_coords[0];
             var y = skills[skill].timer_coords[1];
 
             game.debug.text(Math.floor((Date.now() - skills[skill].last_used) / 1000) + " / 30", x, y, "#a7aebe");
+          } else {
+            if (skill === 'roofers' && skills[skill].sprite != null) {
+              skills[skill].sprite.visible = false;
+            }
           }
         }
       },
