@@ -9,7 +9,7 @@ var health = 100,
 var BasicGame = function (game) { };
 BasicGame.Boot = function (game) { };
 
-var isoGroup, cursorPos, cursor, healthBar;
+var isoGroup, unitGroup, cursorPos, cursor, healthBar;
 var tiles  = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -50,8 +50,8 @@ var tileTypes = {
 }
 var mapW = 25;
 var mapH = tiles.length / mapW;
-
-var mapRoad = [{x:460, y:595}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:765, y:439}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:698, y:406}, {x:461, y:526}, {x:461, y:526}, {x:461, y:526}, {x:461, y:526}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:393, y:492}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:662, y:355}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:612, y:330}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:342, y:464}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:256, y:422}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}, {x:493, y:304}]
+// window.mapEditor = [];
+var mapRoad = [{x:665.5, y:583}, {x:665.5, y:583}, {x:665.5, y:583}, {x:665.5, y:583}, {x:665.5, y:583}, {x:665.5, y:583}, {x:665.5, y:583}, {x:665.5, y:583}, {x:529.5, y:515}, {x:529.5, y:515}, {x:529.5, y:515}, {x:529.5, y:515}, {x:529.5, y:515}, {x:529.5, y:515}, {x:529.5, y:515}, {x:767.5, y:396}, {x:767.5, y:396}, {x:767.5, y:396}, {x:767.5, y:396}, {x:767.5, y:396}, {x:767.5, y:396}, {x:767.5, y:396}, {x:767.5, y:396}, {x:767.5, y:396}, {x:767.5, y:396}, {x:767.5, y:396}, {x:697.5, y:361}, {x:697.5, y:361}, {x:697.5, y:361}, {x:697.5, y:361}, {x:697.5, y:361}, {x:697.5, y:361}, {x:697.5, y:361}, {x:697.5, y:361}, {x:697.5, y:361}, {x:697.5, y:361}, {x:461.5, y:480}, {x:461.5, y:480}, {x:461.5, y:480}, {x:461.5, y:480}, {x:461.5, y:480}, {x:461.5, y:480}, {x:461.5, y:480}, {x:461.5, y:480}, {x:394.5, y:446}, {x:394.5, y:446}, {x:394.5, y:446}, {x:394.5, y:446}, {x:394.5, y:446}, {x:394.5, y:446}, {x:664.5, y:311}, {x:664.5, y:311}, {x:664.5, y:311}, {x:664.5, y:311}, {x:664.5, y:311}, {x:664.5, y:311}, {x:664.5, y:311}, {x:613.5, y:286}, {x:613.5, y:286}, {x:613.5, y:286}, {x:613.5, y:286}, {x:613.5, y:286}, {x:613.5, y:286}, {x:613.5, y:286}, {x:342.5, y:421}, {x:342.5, y:421}, {x:342.5, y:421}, {x:342.5, y:421}, {x:342.5, y:421}, {x:342.5, y:421}, {x:342.5, y:421}, {x:255.5, y:377}, {x:255.5, y:377}, {x:255.5, y:377}, {x:255.5, y:377}, {x:255.5, y:377}, {x:255.5, y:377}, {x:255.5, y:377}, {x:503.5, y:256}, {x:503.5, y:256}, {x:503.5, y:256}, {x:503.5, y:256}, {x:503.5, y:256}, {x:503.5, y:256}, {x:503.5, y:256}];
 
 var skills = {
   'roofers': {
@@ -134,6 +134,8 @@ BasicGame.Boot.prototype =
         isoGroup.enableBody = true;
         isoGroup.physicsBodyType = Phaser.Plugin.Isometric.ISOARCADE;
 
+        unitGroup = game.add.group();
+
         // Let's make a load of tiles on a grid.
         this.spawnTiles();
 
@@ -196,6 +198,10 @@ BasicGame.Boot.prototype =
                 }
             }
         });
+        game.iso.simpleSort(unitGroup);
+        // if(game.input.activePointer.leftButton.isDown){
+        //     window.mapEditor.push({x:game.input.activePointer.x,y:game.input.activePointer.y});
+        // }
     },
     render: function () {
         game.debug.text(health + " / 100" || '--', gameWidth - 290, 44, "#fff");
@@ -218,34 +224,33 @@ BasicGame.Boot.prototype =
                 var type = tiles[(i+1)*mapW-(j+1)];
                 tile = game.add.isoSprite(i * 19, j * 19, 0, tileTypes[type], 0, isoGroup);
                 tile.anchor.set(0.5, 1);
-
                 if (type === 4) {
                   water.push(tile);
                 }
             }
         }
 
-        tile = game.add.isoSprite(78, 450, 0, 'pickup-burning', 0, isoGroup);
+        tile = game.add.isoSprite(78, 450, 0, 'pickup-burning', 0, unitGroup);
         tile.anchor.set(0.5, 1);
-        tile = game.add.isoSprite(140, 30, 0, 'devyatka', 0, isoGroup);
+        tile = game.add.isoSprite(140, 30, 0, 'devyatka', 0, unitGroup);
         tile.anchor.set(0.5, 1);
-        tile = game.add.isoSprite(345, -25, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(345, -25, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(190, -25, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(190, -25, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(260, -25, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(260, -25, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(280, 0, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(280, 0, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(300, -25, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(300, -25, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(310, 400, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(310, 400, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(390, -25, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(390, -25, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(400, 45, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(400, 45, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(520, 290, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(520, 290, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 1);
       }
 };
@@ -254,14 +259,15 @@ game.state.add('Boot', BasicGame.Boot);
 game.state.start('Boot');
 
 function addThiefSprite(x, y) {
-  tile = game.add.sprite(x, y, 'thief', 28);
-  tile.width = 24;
-  tile.height = 36;
-  tile.anchor.set(1, 1);
-  anim = tile.animations.add('walk');
-  anim.play(10, true);
-
-  return tile;
+    var pos={x:0,y:0};
+    game.iso.unproject({x:x,y:y}, pos);
+    tile = game.add.isoSprite(pos.x, pos.y, 0, 'thief', 28, unitGroup);
+    tile.width = 24;
+    tile.height = 36;
+    tile.anchor.set(0.5, 0.9);
+    anim = tile.animations.add('walk');
+    anim.play(10, true);
+    return tile;
 }
 
 /* Units */
@@ -288,8 +294,19 @@ function Enemy(x, y, type){
         if(len > self.speed){
             self.sprite.x += vec.x * self.speed / len;
             self.sprite.y += vec.y * self.speed / len;
+            if(vec.x > 0){
+                self.sprite.scale.x = Math.abs(self.sprite.scale.x);
+            }
+            if(vec.x < 0){
+                self.sprite.scale.x = -Math.abs(self.sprite.scale.x);
+            }
         }
-    };
+        var pos={x:0,y:0};
+        game.iso.unproject(self.sprite, pos);
+        self.sprite.isoX = pos.x;
+        self.sprite.isoY = pos.y;
+        // tile = game.add.isoSprite(pos.x, pos.y, 0, 'thief', 28, unitGroup);
+        };
     var destroy = function(){
         var idx = enemies.indexOf(self);
         if(idx!=-1){
@@ -319,7 +336,18 @@ function Enemy(x, y, type){
         if(self.health==0){
             destroy();
         }
-        console.log(result);
+        if(self.sprite.tint == 0xffffff){
+            setTimeout(function(){
+                if(self && self.sprite){
+                    self.sprite.tint = 0xff0000;
+                }
+            },100);
+            setTimeout(function(){
+                if(self && self.sprite){
+                    self.sprite.tint = 0xffffff;
+                }
+            },300);
+        }
     }
     this.sprite.update = function() {
         getTarget();
@@ -332,8 +360,8 @@ function Defender(tile){
     var self = this;
     map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
     this.damage = 10;
-    this.radius = 30;
-    this.sprite = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 8, isoGroup);
+    this.radius = 70;
+    this.sprite = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 8, unitGroup);
     this.sprite.anchor.set(0.5, 1);
 
     var anim = this.sprite.animations.add('post');
@@ -347,23 +375,27 @@ function Defender(tile){
     };
     var attack = function(){
         if(target){
-            target.hurt(self.damage);
-            anim.play(3, true);
+            var deltaTime = game.time.elapsed/1000; 
+            target.hurt(self.damage*deltaTime);
+            if(!anim.isPlaying){
+                anim.play(3, true);
+            }
         }
     };
     var getTarget = function(){
-        anim.stop();
         var dist;
         target = undefined;
         for (var i = 0; i < enemies.length; i++) {
             dist = distance(enemies[i].sprite, self.sprite);
             if(dist < self.radius){
-                if(!target || dist < distance(target.sprite, self.sprite)){
+                if(!target || distance(target.sprite, self.sprite) < dist){
                     target = enemies[i];
                 }
             }
         }
-        anim.stop(!target);
+        if(!target){
+            anim.stop(true);
+        }
     };
     this.sprite.update = function() {
         getTarget();
