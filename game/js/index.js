@@ -100,6 +100,7 @@ BasicGame.Boot.prototype =
         
         this.myHealthBar = new HealthBar(this.game, barConfig);
         this.myHealthBar.setPercent(health); 
+        // window.e = new Enemy(100,200);
     },
     update: function () {
         // Update the cursor position.
@@ -125,6 +126,8 @@ BasicGame.Boot.prototype =
 
             if (tile.selected && game.input.activePointer.leftButton.isDown) {
               addActivist(tile);
+              // window.e.target.x=game.input.activePointer.position.x;
+              // window.e.target.y=game.input.activePointer.position.y;
             }
         });
     },
@@ -149,3 +152,37 @@ BasicGame.Boot.prototype =
 
 game.state.add('Boot', BasicGame.Boot);
 game.state.start('Boot');
+
+
+function Enemy(x,y){
+    var self = this;
+    this.health = 100;
+    this.speed = 1;
+    this.sprite = game.add.sprite(x, y, 'activist');
+    this.sprite.anchor.set(0.5, 1);
+    this.target = {
+        x: x,
+        y: y,
+    };
+    this.move = function(){
+        var vec = {
+            x: this.target.x,
+            y: this.target.y,
+        }
+        vec.x -= self.sprite.x;
+        vec.y -= self.sprite.y;
+        var len = Math.sqrt(vec.x*vec.x + vec.y*vec.y);
+
+        if(len > 1){
+            vec.x = vec.x/len;
+            vec.y = vec.y/len;
+            self.sprite.x += vec.x*self.speed;
+            self.sprite.y += vec.y*self.speed;
+        }
+
+    };
+    this.sprite.update = function() {
+        self.move();
+    }
+
+}
