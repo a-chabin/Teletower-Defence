@@ -9,7 +9,7 @@ var health = 100,
 var BasicGame = function (game) { };
 BasicGame.Boot = function (game) { };
 
-var isoGroup, cursorPos, cursor;
+var isoGroup, cursorPos, cursor, healthBar;
 var tiles  = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -46,9 +46,7 @@ var mapW = 24;
 var mapH = tiles.length / mapW;
 
 function addActivist(tile) {
-  if (score < 50 || [tile.isoBounds.x, tile.isoBounds.y] in map || tile.key != 'grass') {
-    return;
-  }
+  if (score < 50 || [tile.isoBounds.x, tile.isoBounds.y] in map || tile.key != 'grass') return
 
   score -= 50;
 
@@ -102,9 +100,9 @@ BasicGame.Boot.prototype =
             animationDuration: 600,
             flipped: false
         };
-        game.input.mouse.capture = true;        
-        this.myHealthBar = new HealthBar(this.game, barConfig);
-        this.myHealthBar.setPercent(health); 
+        game.input.mouse.capture = true;
+        healthBar = new HealthBar(this.game, barConfig);
+        healthBar.setPercent(health);
         // window.e = new Enemy(100,200);
     },
     update: function () {
@@ -163,7 +161,7 @@ BasicGame.Boot.prototype =
 game.state.add('Boot', BasicGame.Boot);
 game.state.start('Boot');
 
-
+/* Units */
 function Enemy(x,y){
     var self = this;
     this.health = 100;
@@ -195,4 +193,17 @@ function Enemy(x,y){
         self.move();
     }
 
+}
+
+/* Health */
+function hurt(points) {
+    var result = health - points;
+    health = (result >= 0) ? result : 0;
+    healthBar.setPercent(health);
+}
+
+function heal(points) {
+    var result = health - points;
+    health = (result < 100) ? result : 100;
+    healthBar.setPercent(health);
 }
