@@ -83,7 +83,7 @@ function skillIsAvailable(name) {
 
 function skillIsActive(name) {
   if (skills[name].last_used != null) {
-    return (Date.now() - skills[name].last_used) < 5 * 1000;
+    return (Date.now() - skills[name].last_used) < 30 * 1000;
   }
   return false;
 }
@@ -131,6 +131,7 @@ BasicGame.Boot.prototype =
         game.load.image('devyatka', '../img/devyatka.png');
         game.load.spritesheet('activist', '../img/activist.png', 32, 64, 8);
         game.load.spritesheet('thief', '../img/thief.png', 128, 184, 28);
+        game.load.spritesheet('police', '../img/police.png', 128, 218, 5);
 
         game.time.advancedTiming = true;
         game.plugins.add(new Phaser.Plugin.Isometric(game));
@@ -171,7 +172,7 @@ BasicGame.Boot.prototype =
         game.input.mouse.capture = true;
         healthBar = new HealthBar(this.game, barConfig);
         healthBar.setPercent(health);
-        window.e = spawnEnemy('thief');
+        window.e = spawnEnemy('police');
 
         skills['roofers']['button'] = game.add.button(160, 55, 'buy', buyRoofers, this, 2, 1, 0);
         skills['obnimashki']['button'] = game.add.button(160, 85, 'buy', buyObnimashki, this, 2, 1, 0);
@@ -304,6 +305,17 @@ function addThiefSprite(x, y) {
     return tile;
 }
 
+function addPoliceSprite(x, y) {
+  var pos={x:0,y:0};
+  game.iso.unproject({x:x,y:y}, pos);
+  tile = game.add.isoSprite(pos.x, pos.y, 0, 'police', 5, unitGroup);
+  tile.width = 24;
+  tile.height = 36;
+  tile.anchor.set(0.5, 0.9);
+  anim = tile.animations.add('walk');
+  anim.play(10, true);
+  return tile;
+}
 /* Units */
 function Enemy(x, y, type){
     var self = this;
@@ -313,6 +325,8 @@ function Enemy(x, y, type){
     
     if (type == 'thief') {
       this.sprite = addThiefSprite(x, y);
+    } else if (type == 'police') {
+      this.sprite = addPoliceSprite(x, y);      
     }
     var path = mapRoad.slice();
     var target = path[0] || {
