@@ -166,7 +166,7 @@ BasicGame.Boot.prototype =
         isoGroup.forEach(function (tile) {
             var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
             // If it does, do a little animation and tint change.
-            if (!tile.selected && inBounds) {
+            if (!tile.selected && inBounds && tile.key=="grass_active") {
                 tile.selected = true;
                 tile.tint = 0x86bfda;
             }
