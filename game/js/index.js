@@ -116,8 +116,7 @@ BasicGame.Boot.prototype =
     },
     render: function () {
         game.debug.text(game.time.fps || '--', 2, 14, "#a7aebe");
-        game.debug.text(health + " / 100" || '--', 2, 36, "#a7aebe");
-        game.debug.text("$ " + score || '--', 2, 54, "#a7aebe");
+        game.debug.text("Деньги госдепа: $" + score || '--', 2, 54, "#a7aebe");
       },
     spawnTiles: function () {
         var tile;
