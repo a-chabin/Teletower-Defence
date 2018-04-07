@@ -230,23 +230,15 @@ BasicGame.Boot.prototype =
         tile.anchor.set(0.5, 1);
         tile = game.add.isoSprite(140, 30, 0, 'devyatka', 0, isoGroup);
         tile.anchor.set(0.5, 1);
-        tile = game.add.isoSprite(35, 350, 0, 'tree2', 0, isoGroup);
-        tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(15, 200, 0, 'tree2', 0, isoGroup);
-        tile.anchor.set(0.5, 0.5);
         tile = game.add.isoSprite(345, -25, 0, 'tree2', 0, isoGroup);
         tile.anchor.set(0.5, 0.5);
         tile = game.add.isoSprite(190, -25, 0, 'tree2', 0, isoGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(90, 400, 0, 'tree2', 0, isoGroup);
-        tile.anchor.set(0.5, 0.5);
         tile = game.add.isoSprite(260, -25, 0, 'tree2', 0, isoGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(280, -25, 0, 'tree2', 0, isoGroup);
+        tile = game.add.isoSprite(280, 0, 0, 'tree2', 0, isoGroup);
         tile.anchor.set(0.5, 0.5);
         tile = game.add.isoSprite(300, -25, 0, 'tree2', 0, isoGroup);
-        tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(350, 40, 0, 'tree2', 0, isoGroup);
         tile.anchor.set(0.5, 0.5);
         tile = game.add.isoSprite(310, 400, 0, 'tree2', 0, isoGroup);
         tile.anchor.set(0.5, 0.5);
@@ -254,8 +246,8 @@ BasicGame.Boot.prototype =
         tile.anchor.set(0.5, 0.5);
         tile = game.add.isoSprite(400, 45, 0, 'tree2', 0, isoGroup);
         tile.anchor.set(0.5, 0.5);
-        tile = game.add.isoSprite(400, 240, 0, 'tree2', 0, isoGroup);
-        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(460, 290, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 1);
       }
 };
 
