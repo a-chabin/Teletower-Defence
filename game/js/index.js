@@ -3,7 +3,7 @@ var gameWidth = 1024,
 
 var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'test', null, true, false);
 var health = 100,
-    score = 200,
+    score = 500,
     map = {};
 
 var BasicGame = function (game) { };
@@ -68,6 +68,7 @@ BasicGame.Boot.prototype =
         game.load.image('grass', '../img/grass.png');
         game.load.image('tower', '../img/tower.png');
         game.load.image('pickup-burning', '../img/pickup-burning.png');
+        game.load.image('devyatka', '../img/devyatka.png');
         game.load.spritesheet('activist', '../img/activist.png', 32, 64, 8);
 
         game.time.advancedTiming = true;
@@ -119,13 +120,11 @@ BasicGame.Boot.prototype =
             if (!tile.selected && inBounds) {
                 tile.selected = true;
                 tile.tint = 0x86bfda;
-                // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
             // If not, revert back to how it was.
             else if (tile.selected && !inBounds) {
                 tile.selected = false;
                 tile.tint = 0xffffff;
-                // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
 
             if (tile.selected && game.input.activePointer.leftButton.isDown) {
@@ -154,7 +153,11 @@ BasicGame.Boot.prototype =
 
         tile = game.add.isoSprite(78, 450, 0, 'pickup-burning', 0, isoGroup);
         tile.anchor.set(0.5, 1);
-    }
+
+        tile = game.add.isoSprite(140, 30, 0, 'devyatka', 0, isoGroup);
+        tile.anchor.set(0.5, 1);
+
+      }
 };
 
 game.state.add('Boot', BasicGame.Boot);
