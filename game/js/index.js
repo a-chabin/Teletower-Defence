@@ -57,24 +57,34 @@ var skills = {
   'roofers': {
     'price': 1000,
     'last_used': null,
-    'button': null
+    'button': null,
+    'timer_coords': [240, 70],
   },
   'obnimashki': {
     'price': 2000,
     'last_used': null,
-    'button': null
+    'button': null,
+    'timer_coords': [240, 100],
   },
   'roizman': {
     'price': 5000,
     'last_used': null,
-    'button': null
+    'button': null,
+    'timer_coords': [240, 130],
   }
 };
 var enemies = [];
 var defenders = [];
 
 function skillIsAvailable(name) {
-  return (Date.now() - skills[name].last_used > 30 * 1000) && score >= skills[name].price;
+  return !skillIsActive(name) && score >= skills[name].price;
+}
+
+function skillIsActive(name) {
+  if (skills[name].last_used != null) {
+    return (Date.now() - skills[name].last_used) < 30 * 1000;
+  }
+  return false;
 }
 
 function buy(skill) {
@@ -199,20 +209,28 @@ BasicGame.Boot.prototype =
             }
         });
         game.iso.simpleSort(unitGroup);
-        // if(game.input.activePointer.leftButton.isDown){
-        //     window.mapEditor.push({x:game.input.activePointer.x,y:game.input.activePointer.y});
-        // }
+
+        if (health <= 0) {
+            end();
+        }
     },
     render: function () {
-        game.debug.text(health + " / 100" || '--', gameWidth - 290, 44, "#fff");
-        game.debug.text("Деньги госдепа: $ " + score || '--', 2, 44, "#a7aebe");
+        game.debug.text(health + " / 100", gameWidth - 290, 44, "#fff");
+        game.debug.text("Деньги госдепа: $ " + score, 2, 44, "#a7aebe");
 
-        game.debug.text("Руферы: $1000" || '--', 2, 70, "#a7aebe");
-        game.debug.text("Обнимашки: $2000" || '--', 2, 100, "#a7aebe");
-        game.debug.text("Ройзман: $5000" || '--', 2, 130, "#a7aebe");
+        game.debug.text("Руферы: $1000", 2, 70, "#a7aebe");
+        game.debug.text("Обнимашки: $2000", 2, 100, "#a7aebe");
+        game.debug.text("Ройзман: $5000", 2, 130, "#a7aebe");
 
         for (skill in skills) {
           skills[skill].button.visible = skillIsAvailable(skill);
+
+          if (skillIsActive(skill) && skills[skill].last_used != null) {
+            var x = skills[skill].timer_coords[0];
+            var y = skills[skill].timer_coords[1];
+
+            game.debug.text(Math.floor((Date.now() - skills[skill].last_used) / 1000) + " / 30", x, y, "#a7aebe");
+          }
         }
       },
     spawnTiles: function () {
@@ -333,7 +351,7 @@ function Enemy(x, y, type){
     this.hurt = function(points) {
         var result = self.health - points;
         self.health = (result >= 0) ? result : 0;
-        if(self.health==0){
+        if(self.health<=0){
             destroy();
         }
         if(self.sprite.tint == 0xffffff){
