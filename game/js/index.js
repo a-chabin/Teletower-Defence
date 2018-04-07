@@ -40,8 +40,7 @@ var tileTypes = {
     0: 'grass',
     1: 'road',
     2: 'grass_active',
-    3: 'tower',
-    4: 'pickup-burning'
+    3: 'tower'
 }
 var mapW = 24;
 var mapH = tiles.length / mapW;
@@ -108,6 +107,8 @@ BasicGame.Boot.prototype =
 {
     preload: function () {
         game.load.image('buy', '../img/buy.png');
+        game.load.image('tree1', '../img/tree1.png');
+        game.load.image('tree2', '../img/tree2.png');
         game.load.image('road', '../img/road.png');
         game.load.image('grass', '../img/grass.png');
         game.load.image('grass_active', '../img/grass_active.png');
@@ -209,6 +210,39 @@ BasicGame.Boot.prototype =
 
         tile = game.add.isoSprite(140, 30, 0, 'devyatka', 0, isoGroup);
         tile.anchor.set(0.5, 1);
+
+        tile = game.add.isoSprite(35, 350, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+
+        tile = game.add.isoSprite(15, 200, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+
+        tile = game.add.isoSprite(345, -25, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+
+        tile = game.add.isoSprite(190, -25, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+
+        tile = game.add.isoSprite(90, 400, 0, 'tree2', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+
+        tile = game.add.isoSprite(260, -25, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(280, -25, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(300, -25, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(350, 40, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(310, 410, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(390, -25, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+        tile = game.add.isoSprite(410, 45, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
+
+        tile = game.add.isoSprite(410, 240, 0, 'tree1', 0, isoGroup);
+        tile.anchor.set(0.5, 0.5);
 
       }
 };
