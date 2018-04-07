@@ -125,6 +125,7 @@ BasicGame.Boot.prototype =
         game.load.image('pickup-burning', '../img/pickup-burning.png');
         game.load.image('devyatka', '../img/devyatka.png');
         game.load.spritesheet('activist', '../img/activist.png', 32, 64, 8);
+        game.load.spritesheet('thief', '../img/thief.png', 128, 184, 28);
 
         game.time.advancedTiming = true;
         game.plugins.add(new Phaser.Plugin.Isometric(game));
@@ -164,6 +165,7 @@ BasicGame.Boot.prototype =
         healthBar = new HealthBar(this.game, barConfig);
         healthBar.setPercent(health);
         // window.e = new Enemy(100,200);
+
         skills['roofers']['button'] = game.add.button(160, 55, 'buy', buyRoofers, this, 2, 1, 0);
         skills['obnimashki']['button'] = game.add.button(160, 85, 'buy', buyObnimashki, this, 2, 1, 0);
         skills['roizman']['button'] = game.add.button(160, 115, 'buy', buyRoizman, this, 2, 1, 0);
@@ -255,14 +257,25 @@ BasicGame.Boot.prototype =
 game.state.add('Boot', BasicGame.Boot);
 game.state.start('Boot');
 
+function addThiefSprite(x, y) {
+  tile = game.add.isoSprite(x, y, 0, 'thief', 28, isoGroup);
+  tile.width = 24;
+  tile.height = 36;
+  tile.anchor.set(1, 1);
+  anim = tile.animations.add('walk');
+  anim.play(10, true);
+}
+
 /* Units */
-function Enemy(x, y){
+function Enemy(x, y, type){
     var self = this;
     this.health = 100;
     this.speed = 1;
     this.damage = 10;
-    this.sprite = game.add.sprite(x, y, 'activist');
-    this.sprite.anchor.set(0.5, 1);
+    
+    if (type == 'thief') {
+      this.sprite = addThiefSprite(x, y);
+    }
     var path = mapRoad.slice();
     var target = path[0] || {
         x: x,
@@ -321,10 +334,9 @@ function heal(points) {
     healthBar.setPercent(health);
 }
 
-function spawnEnemy(){
-    new Enemy(mapRoad[0].x,mapRoad[0].y);
+function spawnEnemy(type){
+    new Enemy(mapRoad[0].x,mapRoad[0].y, type);
 }
-
 function startGame(){
     console.log("start");
 }
