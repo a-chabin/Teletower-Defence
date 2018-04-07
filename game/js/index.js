@@ -170,7 +170,7 @@ BasicGame.Boot.prototype =
             flipped: false
         };
         game.input.mouse.capture = true;
-        healthBar = new HealthBar(this.game, barConfig);
+        healthBar = new HealthBar(game, barConfig);
         healthBar.setPercent(health);
         window.e = spawnEnemy('police');
 
@@ -287,6 +287,8 @@ BasicGame.Boot.prototype =
         tile.anchor.set(0.5, 0.5);
         tile = game.add.isoSprite(520, 290, 0, 'tree2', 0, unitGroup);
         tile.anchor.set(0.5, 1);
+        tile = game.add.isoSprite(130, 320, 0, 'tree2', 0, unitGroup);
+        tile.anchor.set(0.5, 1);
       }
 };
 
@@ -382,7 +384,11 @@ function Enemy(x, y, type){
         var result = self.health - points;
         self.health = (result >= 0) ? result : 0;
         if(self.health<=0){
-            destroy();
+            self.damage = 0;
+            target = {x:475, y:590};
+            path = [target];
+            // destroy();
+            return;
         }
         if(self.sprite.tint == 0xffffff){
             setTimeout(function(){
