@@ -1,10 +1,8 @@
 var gameWidth = 1024,
-    gameHeight = 800,
-    health = 60,
-    score = 0;
+    gameHeight = 800;
 
 var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'test', null, true, false);
-var health = 0,
+var health = 100,
     score = 200,
     map = {};
 
@@ -75,7 +73,6 @@ BasicGame.Boot.prototype =
         game.iso.anchor.setTo(0.5, 0.3);
     },
     create: function () {
-
         // Create a group for our tiles.
         isoGroup = game.add.group();
 
