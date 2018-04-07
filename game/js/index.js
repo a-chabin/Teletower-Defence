@@ -172,7 +172,7 @@ BasicGame.Boot.prototype =
         game.input.mouse.capture = true;
         healthBar = new HealthBar(game, barConfig);
         healthBar.setPercent(health);
-        window.e = spawnEnemy('police');
+        spawnEnemy();
 
         skills['roofers']['button'] = game.add.button(160, 55, 'buy', buyRoofers, this, 2, 1, 0);
         skills['obnimashki']['button'] = game.add.button(160, 85, 'buy', buyObnimashki, this, 2, 1, 0);
@@ -295,41 +295,12 @@ BasicGame.Boot.prototype =
 game.state.add('Boot', BasicGame.Boot);
 game.state.start('Boot');
 
-function addThiefSprite(x, y) {
-    var pos={x:0,y:0};
-    game.iso.unproject({x:x,y:y}, pos);
-    tile = game.add.isoSprite(pos.x, pos.y, 0, 'thief', 28, unitGroup);
-    tile.width = 24;
-    tile.height = 36;
-    tile.anchor.set(0.5, 0.9);
-    anim = tile.animations.add('walk');
-    anim.play(10, true);
-    return tile;
-}
-
-function addPoliceSprite(x, y) {
-  var pos={x:0,y:0};
-  game.iso.unproject({x:x,y:y}, pos);
-  tile = game.add.isoSprite(pos.x, pos.y, 0, 'police', 5, unitGroup);
-  tile.width = 24;
-  tile.height = 36;
-  tile.anchor.set(0.5, 0.9);
-  anim = tile.animations.add('walk');
-  anim.play(10, true);
-  return tile;
-}
 /* Units */
-function Enemy(x, y, type){
+function Enemy(x, y){
     var self = this;
     this.health = 100;
     this.speed = 1;
     this.damage = 10;
-    
-    if (type == 'thief') {
-      this.sprite = addThiefSprite(x, y);
-    } else if (type == 'police') {
-      this.sprite = addPoliceSprite(x, y);      
-    }
     var path = mapRoad.slice();
     var target = path[0] || {
         x: x,
@@ -410,6 +381,34 @@ function Enemy(x, y, type){
     enemies.push(this);
 }
 
+function Thief(x, y){
+    var pos = {x: 0, y: 0};
+    game.iso.unproject({x:x,y:y}, pos);
+    this.sprite = game.add.isoSprite(pos.x, pos.y, 0, 'thief', 28, unitGroup);
+    this.sprite.width = 24;
+    this.sprite.height = 36;
+    this.sprite.anchor.set(0.5, 0.9);
+    this.anim = this.sprite.animations.add('walk');
+    this.anim.play(10, true);
+    Enemy.call(this, x, y);
+    this.health = 100;
+    this.damage = 10;
+}
+
+function Police(x, y){
+    var pos = {x: 0, y: 0};
+    game.iso.unproject({x:x,y:y}, pos);
+    this.sprite = game.add.isoSprite(pos.x, pos.y, 0, 'police', 5, unitGroup);
+    this.sprite.width = 24;
+    this.sprite.height = 36;
+    this.sprite.anchor.set(0.5, 0.9);
+    this.anim = this.sprite.animations.add('walk');
+    this.anim.play(10, true);
+    Enemy.call(this, x, y);
+    this.health = 200;
+    this.damage = 20;
+}
+
 function Defender(tile){
     var self = this;
     map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
@@ -443,7 +442,9 @@ function Defender(tile){
             dist = distance(enemies[i].sprite, self.sprite);
             if(dist < self.radius){
                 if(!target || distance(target.sprite, self.sprite) < dist){
-                    target = enemies[i];
+                    if(enemies[i].health > 0){
+                        target = enemies[i];
+                    }
                 }
             }
         }
@@ -473,7 +474,10 @@ function heal(points) {
 }
 
 function spawnEnemy(type){
-    return new Enemy(mapRoad[0].x,mapRoad[0].y, type);
+    new Thief(mapRoad[0].x,mapRoad[0].y);
+    setTimeout(function(){
+        new Police(mapRoad[0].x,mapRoad[0].y);
+    },1000)
 }
 function startGame(){
     console.log("start");
