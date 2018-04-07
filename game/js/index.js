@@ -2,6 +2,7 @@ var game = new Phaser.Game(1024, 800, Phaser.AUTO, 'test', null, true, false);
 
 var health = 0;
 var score = 0;
+var map = {};
 
 var BasicGame = function (game) { };
 
@@ -40,12 +41,25 @@ var tileTypes = {
     3: 'tower',
 }
 
+function addActivist(tile) {
+  console.log([tile.isoBounds.x, tile.isoBounds.y]);
+  if ([tile.isoBounds.x, tile.isoBounds.y] in map) {
+    return;
+  }
+
+  map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
+
+  tile = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 0, isoGroup);
+  tile.anchor.set(0.5, 1);
+}
+
 BasicGame.Boot.prototype =
 {
     preload: function () {
         game.load.image('road', '../img/road.png');
         game.load.image('grass', '../img/grass.png');
         game.load.image('tower', '../img/tower.png');
+        game.load.image('activist', '../img/activist.png');
 
         game.time.advancedTiming = true;
         game.plugins.add(new Phaser.Plugin.Isometric(game));
@@ -64,6 +78,8 @@ BasicGame.Boot.prototype =
 
         // Provide a 3D position for the cursor
         cursorPos = new Phaser.Plugin.Isometric.Point3();
+
+        game.input.mouse.capture = true;
 
         var barConfig = {x: 150, y: 100};
         this.myHealthBar = new HealthBar(this.game, barConfig);
@@ -88,6 +104,10 @@ BasicGame.Boot.prototype =
                 tile.selected = false;
                 tile.tint = 0xffffff;
                 // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
+            }
+
+            if (tile.selected && game.input.activePointer.leftButton.isDown) {
+              addActivist(tile);
             }
         });
     },
