@@ -600,7 +600,7 @@ function startGame(){
     new Wave([Thief, 5, Police, 2], [1000, 2000], 2000);
     new Wave([Thief, 10, Police, 8], [1000, 2000], 20000);
     new Wave([Thief, 40, Police, 20], [1000, 2000], 40000);
-    new Wave([Boss, 20], [2000, 3000], 60000);
+    new Wave([Boss, 200], [2000, 3000], 80000);
     timer.start();
 }
 
