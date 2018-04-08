@@ -499,6 +499,21 @@ function Police(x, y){
     this.reward = 2000;
 }
 
+function Boss(x, y){
+    var pos = {x: 0, y: 0};
+    game.iso.unproject({x:x,y:y}, pos);
+    this.sprite = game.add.isoSprite(pos.x, pos.y, 0, 'police', 5, unitGroup);
+    this.sprite.width = 24;
+    this.sprite.height = 36;
+    this.sprite.anchor.set(0.5, 0.9);
+    this.anim = this.sprite.animations.add('walk');
+    this.anim.play(10, true);
+    Enemy.call(this, x, y);
+    this.health = 4000;
+    this.damage = 40;
+    this.reward = 20000;
+}
+
 function Defender(tile){
     var self = this;
     map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
@@ -584,7 +599,7 @@ function startGame(){
     new Wave([Thief, 5, Police, 2], [1000, 2000], 2000);
     new Wave([Thief, 10, Police, 8], [1000, 2000], 20000);
     new Wave([Thief, 40, Police, 20], [1000, 2000], 40000);
-    new Wave([Thief, 65, Police, 35], [1000, 2000], 60000);
+    new Wave([Boss, 20], [2000, 3000], 60000);
     timer.start();
 }
 
