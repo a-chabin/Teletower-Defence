@@ -102,6 +102,11 @@ function buy(skill) {
 
 function buyRoofers() {
   buy('roofers');
+
+  var enm = enemies.slice();
+  for (var i = 0; i < enm.length; i++) {
+    enm[i].freeze();
+  }
 }
 
 function buyObnimashki() {
@@ -114,6 +119,13 @@ function buyObnimashki() {
 
 function buyRoizman() {
   buy('roizman');
+
+  epic();
+
+  var enm = enemies.slice();
+  for (var i = 0; i < enm.length; i++) {
+    enm[i].destroy();
+  }
 }
 
 function addActivist(tile) {
@@ -246,6 +258,12 @@ BasicGame.Boot.prototype =
 
         if (health <= 0) {
             end();
+        }
+
+        if (!skillIsActive('roofers')) {
+            for (var i = 0; i < enemies.length; i++) {
+                enemies[i].unfreeze();
+            }    
         }
     },
     render: function () {
@@ -381,7 +399,7 @@ function Enemy(x, y){
         self.sprite.isoY = pos.y;
         // tile = game.add.isoSprite(pos.x, pos.y, 0, 'thief', 28, unitGroup);
         };
-    var destroy = function(){
+    this.destroy = function(){
         var idx = enemies.indexOf(self);
         if(idx!=-1){
             enemies.splice(idx, 1);
@@ -395,10 +413,19 @@ function Enemy(x, y){
             target = path[0] || target;
         }
         if(path.length==0){
-            destroy();
+            self.destroy();
             hurt(self.damage);
         }
     };
+
+    this.freeze = function() {
+        if (target.x === 475 && target.y === 590) return;
+        self.active = false;
+    }
+
+    this.unfreeze = function() {
+        self.active = true;
+    }
 
     this.moveTo = function(x, y){
         target.x = x;
@@ -412,6 +439,7 @@ function Enemy(x, y){
             score += self.reward;
             target = {x:475, y:590};
             path = [target];
+            self.unfreeze();
             // destroy();
             return;
         }
