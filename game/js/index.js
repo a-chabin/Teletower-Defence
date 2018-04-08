@@ -366,7 +366,7 @@ game.state.start('Boot');
 function Enemy(x, y){
     var self = this;
     this.health = 100;
-    this.speed = 1;
+    this.speed = 60;
     this.damage = 10;
     this.reward = 100;
     this.active = true;
@@ -382,9 +382,10 @@ function Enemy(x, y){
             y: target.y - self.sprite.y,
         }
         var len = distance(target, self.sprite)
-        if(len > self.speed){
-            self.sprite.x += vec.x * self.speed / len;
-            self.sprite.y += vec.y * self.speed / len;
+        var deltaTime = game.time.elapsed/1000; 
+        if(len > self.speed*deltaTime){
+            self.sprite.x += vec.x * self.speed / len*deltaTime;
+            self.sprite.y += vec.y * self.speed / len*deltaTime;
             if(vec.x > 0){
                 self.sprite.scale.x = Math.abs(self.sprite.scale.x);
             }
@@ -407,7 +408,8 @@ function Enemy(x, y){
     };
     var getTarget = function(){
         var len = distance(target, self.sprite)
-        if(len <= self.speed){
+        var deltaTime = game.time.elapsed/1000; 
+        if(len <= self.speed*deltaTime){
             path.shift();
             target = path[0] || target;
         }
@@ -478,8 +480,8 @@ function Thief(x, y){
     this.anim.play(10, true);
     Enemy.call(this, x, y);
     this.health = 100;
-    this.damage = 30;
-    this.reward = 1000;
+    this.damage = 20;
+    this.reward = 500;
 }
 
 function Police(x, y){
@@ -493,14 +495,14 @@ function Police(x, y){
     this.anim.play(10, true);
     Enemy.call(this, x, y);
     this.health = 200;
-    this.damage = 20;
+    this.damage = 40;
     this.reward = 2000;
 }
 
 function Defender(tile){
     var self = this;
     map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
-    this.damage = 2;
+    this.damage = 5;
     this.radius = 70;
     this.sprite = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 8, unitGroup);
     this.sprite.anchor.set(0.5, 1);
@@ -579,8 +581,10 @@ function spawnEnemy(gameClass){
 }
 function startGame(){
     console.log("start");
-    new Wave([Thief, 35, Police, 15], [500, 2000], 2000);
-    new Wave([Thief, 65, Police, 35], [500, 2000], 60000);
+    new Wave([Thief, 5, Police, 2], [1000, 2000], 2000);
+    new Wave([Thief, 10, Police, 8], [1000, 2000], 20000);
+    new Wave([Thief, 40, Police, 20], [1000, 2000], 40000);
+    new Wave([Thief, 65, Police, 35], [1000, 2000], 60000);
     timer.start();
 }
 
