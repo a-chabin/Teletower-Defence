@@ -1,13 +1,10 @@
-var gameWidth = 1024,
-    gameHeight = 650;
-
-var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'test', null, true, false);
+var game = new Phaser.Game(1024, 650, Phaser.AUTO, 'test', null, true, false);
 var health = 100,
     score = 5000,
     map = {};
 
-var BasicGame = function (game) { };
-BasicGame.Boot = function (game) { };
+var BasicGame = function (game) {};
+BasicGame.Boot = function (game) {};
 
 var isoGroup, unitGroup, cursorPos, cursor, healthBar;
 var tiles  = [
@@ -115,6 +112,8 @@ function addActivist(tile) {
 
 var water = [];
 
+var tower;
+
 BasicGame.Boot.prototype =
 {
     preload: function () {
@@ -155,16 +154,21 @@ BasicGame.Boot.prototype =
         // Provide a 3D position for the cursor
         cursorPos = new Phaser.Plugin.Isometric.Point3();
 
+        var rectangle = new Phaser.Rectangle(game.width - 300, 10, 270, 20);
+        var bmd = game.add.bitmapData(game.width, game.height);
+        bmd.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, '#2d2d2d');
+        bmd.addToWorld();
+
         var barConfig = {
-            width: 250,
-            height: 20,
-            x: gameWidth - 250,
-            y: 40,
+            width: 266,
+            height: 16,
+            x: game.width - 165,
+            y: 20,
             bg: {
-              color: '#F5F5F5'
+              color: '#8e2020'
             },
             bar: {
-              color: '#D9534F'
+              color: '#fe0000'
             },
             animationDuration: 600,
             flipped: false
@@ -218,7 +222,7 @@ BasicGame.Boot.prototype =
         }
     },
     render: function () {
-        game.debug.text(health + " / 100", gameWidth - 290, 44, "#fff");
+        game.debug.text(health, game.width - 180, 25, "#fff");
         game.debug.text("Деньги госдепа: $ " + score, 2, 44, "#a7aebe");
 
         game.debug.text("Руферы: $1000", 2, 70, "#a7aebe");
@@ -259,9 +263,12 @@ BasicGame.Boot.prototype =
                 var type = tiles[(i+1)*mapW-(j+1)];
                 tile = game.add.isoSprite(i * 19, j * 19, 0, tileTypes[type], 0, isoGroup);
                 tile.anchor.set(0.5, 1);
-                if (type === 4) {
-                  water.push(tile);
+                if (type === 3) {
+                  tower = tile;
                 }
+                if (type === 4) {
+                    water.push(tile);
+                  }
             }
         }
 
@@ -392,7 +399,7 @@ function Thief(x, y){
     this.anim.play(10, true);
     Enemy.call(this, x, y);
     this.health = 100;
-    this.damage = 10;
+    this.damage = 30;
 }
 
 function Police(x, y){
@@ -465,6 +472,19 @@ function hurt(points) {
     var result = health - points;
     health = (result >= 0) ? result : 0;
     healthBar.setPercent(health);
+    var self = tower;
+    if(points > 0 && self && self.tint == 0xffffff){
+        setTimeout(function(){
+            if(self && self){
+                self.tint = 0xff0000;
+            }
+        },100);
+        setTimeout(function(){
+            if(self && self){
+                self.tint = 0xffffff;
+            }
+        },300);
+    }
 }
 
 function heal(points) {
