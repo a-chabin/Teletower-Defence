@@ -327,12 +327,14 @@ function Enemy(x, y){
     this.health = 100;
     this.speed = 1;
     this.damage = 10;
+    this.active = true;
     var path = mapRoad.slice();
     var target = path[0] || {
         x: x,
         y: y,
     };
     var move = function(){
+        if(!self.active) return;
         var vec = {
             x: target.x - self.sprite.x,
             y: target.y - self.sprite.y,
@@ -401,6 +403,11 @@ function Enemy(x, y){
         }
     }
     this.sprite.update = function() {
+        if(self.active){
+            !self.anim.isPlaying && self.anim.play();
+        }else{
+            self.anim.stop();
+        }
         getTarget();
         move();
     }
