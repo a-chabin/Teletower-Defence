@@ -76,6 +76,10 @@ var enemies = [];
 var defenders = [];
 
 function skillIsAvailable(name) {
+  if (name === 'obnimashki' && health > 80) {
+      return false;
+  }
+
   return !skillIsActive(name) && score >= skills[name].price;
 }
 
@@ -100,7 +104,11 @@ function buyRoofers() {
 }
 
 function buyObnimashki() {
+  if (health > 80) return;
+
   buy('obnimashki');
+
+  heal(20);
 }
 
 function buyRoizman() {
@@ -518,7 +526,7 @@ function hurt(points) {
 }
 
 function heal(points) {
-    var result = health - points;
+    var result = health + points;
     health = (result < 100) ? result : 100;
     healthBar.setPercent(health);
 }
