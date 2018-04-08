@@ -67,6 +67,7 @@ article:not(.hide) ~ canvas {
 
 section {
     max-width: 800px;
+    text-align: left;
 }
 
 h1 {
@@ -79,8 +80,9 @@ p {
 }
 
 .note {
-	margin: 0;
-	font-size: 14px;
+    font-size: 14px !important;
+    margin: 20px 0 !important;
+    color: #c3c3c3;
 }
 
 canvas {
@@ -97,7 +99,7 @@ canvas {
 button {
 	display: inline-block;
 	outline: none;
-	margin-top: 40px;
+    margin: 25px 0 15px;
     padding: 17px 35px;
     border: none;
     color: white;

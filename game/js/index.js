@@ -294,7 +294,7 @@ BasicGame.Boot.prototype =
                 if (skills[skill].sprite != null) {
                     skills[skill].sprite.visible = true;
                 } else {
-                    tile = game.add.isoSprite(90, 110, 0, 'friends', 0, isoGroup);
+                    tile = game.add.isoSprite(110, 110, 0, 'friends', 0, isoGroup);
                     tile.anchor.set(0.5, 1);
                     skills[skill].sprite = tile;
                 }
