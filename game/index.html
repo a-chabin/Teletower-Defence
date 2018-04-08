@@ -39,6 +39,7 @@
       var startScreen = document.getElementById('start-screen'),
           endScreen = document.getElementById('end-screen'),
           audio = new Audio('./audio/karliki.mp3'),
+          audioPrivet = new Audio('./audio/vsemprivet.mp3'),
           videoContainer = document.getElementById('video'),
           youtube = document.createElement('iframe');
           youtube.src = "https://www.youtube.com/embed/y_RCM37Ba7w?autoplay=1&amp;rel=0&amp;controls=0&amp;showinfo=0&amp;start=20";
@@ -61,10 +62,11 @@
       }
 
       function epic() {
+        audioPrivet.play();
         document.body.className = 'roizman';
         setTimeout(function() {
           document.body.className = '';
-        }, 2000);
+        }, 2200);
       }
     </script>
   </body>

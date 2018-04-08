@@ -39,12 +39,11 @@ body {
 	position: relative;
 	min-width: 1024px;
 	overflow: hidden;
-	transition: .3s background cubic-bezier(0.895, 0.03, 0.685, 0.22);
 }
 
 .roizman {
-    background: url(../img/roizman.jpg) -5% 55%;
-    background-size: 110% auto;
+    background: url(../img/roizman.jpg) 50% 50%;
+    background-size: cover;
 }
 
 article {
