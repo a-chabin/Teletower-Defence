@@ -190,7 +190,6 @@ BasicGame.Boot.prototype =
         game.input.mouse.capture = true;
         healthBar = new HealthBar(game, barConfig);
         healthBar.setPercent(health);
-        spawnEnemy();
 
         game.add.image(190, 55, "buy-disabled-3000");
         game.add.image(190, 90, "buy-disabled-5000");
@@ -524,14 +523,12 @@ function heal(points) {
     healthBar.setPercent(health);
 }
 
-function spawnEnemy(type){
-    new Thief(mapRoad[0].x,mapRoad[0].y);
-    setTimeout(function(){
-        new Police(mapRoad[0].x,mapRoad[0].y);
-    },1000)
+function spawnEnemy(gameClass){
+    new gameClass(mapRoad[0].x,mapRoad[0].y);
 }
 function startGame(){
     console.log("start");
+    new Wave([Thief, 4, Police, 2], 1000, 2000);
 }
 
 
@@ -541,4 +538,30 @@ function distance(vec1, vec2) {
         y: vec1.y - vec2.y,
     }
     return Math.sqrt(vec.x*vec.x + vec.y*vec.y);
+}
+
+function Wave(enemies, rate, pause, after) {
+    var timerId;
+    var pack = [];
+    var enemy;
+    for (var i = 0; i < enemies.length/2; i++) {
+        pack.push({
+            "class": enemies[2*i],
+            "count": enemies[2*i+1],
+        })
+    }
+
+    var spawn = function() {
+        pack = pack.filter(function(a){return a.count>0});
+        if(pack.length){
+            enemy = pack[Math.floor(Math.random()*pack.length)];
+            enemy.count-=1;
+            spawnEnemy(enemy.class);
+        }else{
+
+        }
+    }
+    setTimeout(function(){
+        timerId = setInterval(spawn, rate+Math.random()*rate*0.2-rate*0.1);
+    }, pause);
 }
