@@ -53,8 +53,8 @@ article {
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    line-height: 2.5;
-	font-size: 17px;
+    line-height: 1.8;
+	font-size: 18px;
 	text-align: center;
     background: rgba(0, 0, 0, 0.5);
 	text-shadow: 1px 2px 0 #000;
@@ -71,7 +71,16 @@ section {
 
 h1 {
 	font-size: 40px;
-	margin-bottom: 20px;
+	margin-bottom: 30px;
+}
+
+p {
+	margin-bottom: 25px;
+}
+
+.note {
+	margin: 0;
+	font-size: 14px;
 }
 
 canvas {
@@ -88,7 +97,7 @@ canvas {
 button {
 	display: inline-block;
 	outline: none;
-	margin-top: 30px;
+	margin-top: 40px;
     padding: 17px 35px;
     border: none;
     color: white;
