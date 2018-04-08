@@ -1,5 +1,5 @@
 var game = new Phaser.Game(1024, 650, Phaser.AUTO, 'test', null, true, false);
-var health = 100,
+var health = 50,
     score = 5000,
     map = {};
 
@@ -294,7 +294,7 @@ BasicGame.Boot.prototype =
                 if (skills[skill].sprite != null) {
                     skills[skill].sprite.visible = true;
                 } else {
-                    tile = game.add.isoSprite(90, 110, 0, 'friends', 0, isoGroup);
+                    tile = game.add.isoSprite(110, 110, 0, 'friends', 0, isoGroup);
                     tile.anchor.set(0.5, 1);
                     skills[skill].sprite = tile;
                 }
