@@ -5,7 +5,7 @@
 
     <title>Teletower Defence</title>
 
-    <link rel="stylesheet" type="text/css" href="http://tech.skbkontur.ru/hackathon-2018.1-team35/css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon" />
 
     <script src="http://tech.skbkontur.ru/hackathon-2018.1-team35/vendor/phaser.min.js"></script>
@@ -18,34 +18,35 @@
     <article id="start-screen">
       <section>
         <h1>Teletower Defence</h1>
-        <p>Эта игра посвящена недостроенной Телебашне в центре Екатеринбурга.</p>
-        <p>Сюжет: Март 2018г, сотрудники УГМК собираются взорвать башню и построить
-          на её месте ледовый дворец, но жители Екатеринбурга
-          не согласны с таким решением и пытаются защитить символ города.</p>
-        <p>Ход событий предопределен, но именно ты можешь исправить прошлое.
-          Используй все доступные способы, чтобы отстоять башню!</p>
-        <p>Все персонажи вымышлены, все совпадения случайны. 
-        Основано на реальных событиях.</p>
-        <button onclick="start()" autofocus tabindex="0">Начать игру</button>
+        <p>Эта игра посвящена недостроенной Телебашне в&nbsp;центре Екатеринбурга.<br>
+          Карлики собираются взорвать башню, но&nbsp;Екатеринбуржцы не&nbsp;согласны и&nbsp;пытаются защитить символ города.</p>
+        <p>Ход событий предопределен, но&nbsp;именно ты&nbsp;можешь исправить прошлое. Используй все доступные способы, чтобы отстоять башню!</p>
+        <p>Кликай на&nbsp;клетку поля, чтобы поставить защитника. Проходя мимо них, противники будут терять вражеский настрой и&nbsp;отступать.</p>
+        <div style="text-align: center;">
+            <button onclick="start()" autofocus tabindex="0">Начать игру</button>
+        </div>
+        <div class="note">
+            * Все персонажи вымышлены, все совпадения случайны.
+            <br>
+            ** Основано на реальных событиях.
+          </div>
       </section>
     </article>
     <article id="end-screen" class="hide">
       <h1>Game over</h1>
-      <div id="video"></div>
-      <button onclick="start()" tabindex="0">Начать заново</button>
+      <video id="video" width="800" height="438">
+        <source src="http://tech.skbkontur.ru/hackathon-2018.1-team35/video/video1.mp4" type="video/mp4">
+      </video>
+      <button onclick="location.reload()" tabindex="0">Начать заново</button>
     </article>
 
     <script>
       var startScreen = document.getElementById('start-screen'),
           endScreen = document.getElementById('end-screen'),
           audio = new Audio('http://tech.skbkontur.ru/hackathon-2018.1-team35/audio/karliki.mp3'),
-          videoContainer = document.getElementById('video'),
-          youtube = document.createElement('iframe');
-          youtube.src = "https://www.youtube.com/embed/y_RCM37Ba7w?autoplay=1&amp;rel=0&amp;controls=0&amp;showinfo=0&amp;start=20";
-          youtube.width = 800;
-          youtube.height = 450;
-          youtube.frameBorder = 0;
-          youtube.allow = "autoplay; encrypted-media";
+          audioPrivet = new Audio('http://tech.skbkontur.ru/hackathon-2018.1-team35/audio/vsemprivet.mp3'),
+          videoContainer = document.getElementById('video');
+
 
       function start() {
         document.dispatchEvent(new CustomEvent('startGame'));
@@ -55,9 +56,17 @@
       }
 
       function end() {
-        videoContainer.appendChild(youtube);
+        document.querySelector('video').play();
         startScreen.className = 'hide';
         endScreen.className = '';
+      }
+
+      function epic() {
+        audioPrivet.play();
+        document.body.className = 'roizman';
+        setTimeout(function() {
+          document.body.className = '';
+        }, 2200);
       }
     </script>
   </body>
