@@ -116,9 +116,7 @@ function buyRoizman() {
   buy('roizman');
 }
 
-function addActivist(tile) {
-  
-}
+var timer;
 
 var water = [];
 
@@ -210,6 +208,7 @@ BasicGame.Boot.prototype =
         skills['roizman']['button'] = game.add.button(190, 125, 'buy-10000', buyRoizman, this, 2, 1, 0);
 
         document.addEventListener("startGame", startGame);
+        timer = game.time.create(false);
       },
     update: function () {
         // Update the cursor position.
@@ -473,7 +472,7 @@ function Police(x, y){
 function Defender(tile){
     var self = this;
     map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
-    this.damage = 5;
+    this.damage = 2;
     this.radius = 70;
     this.sprite = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 8, unitGroup);
     this.sprite.anchor.set(0.5, 1);
@@ -554,6 +553,7 @@ function startGame(){
     console.log("start");
     new Wave([Thief, 35, Police, 15], [500, 2000], 2000);
     new Wave([Thief, 65, Police, 35], [500, 2000], 60000);
+    timer.start();
 }
 
 
@@ -565,8 +565,11 @@ function distance(vec1, vec2) {
     return Math.sqrt(vec.x*vec.x + vec.y*vec.y);
 }
 
+window.Wave=Wave;
+window.Thief=Thief;
+window.Police=Police;
+
 function Wave(enemies, rate, pause) {
-    var timerId;
     var pack = [];
     var enemy;
     for (var i = 0; i < enemies.length/2; i++) {
@@ -582,7 +585,8 @@ function Wave(enemies, rate, pause) {
             enemy = pack[Math.floor(Math.random()*pack.length)];
             enemy.count-=1;
             spawnEnemy(enemy.class);
-            setTimeout(spawn, rate[0] + (rate[1]-rate[0])*Math.random());
+            timer.add(rate[0] + (rate[1]-rate[0])*Math.random(), spawn);
         }
     }
-    setTimeout(spawn, pause);
+    timer.add(pause, spawn);
+}
