@@ -1,5 +1,5 @@
 var game = new Phaser.Game(1024, 650, Phaser.AUTO, 'test', null, true, false);
-var health = 50,
+var health = 100,
     score = 5000,
     map = {};
 
