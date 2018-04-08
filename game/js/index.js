@@ -52,23 +52,23 @@ var mapRoad = [{x:665.5, y:583}, {x:665.5, y:583}, {x:665.5, y:583}, {x:665.5, y
 
 var skills = {
   'roofers': {
-    'price': 1000,
+    'price': 3000,
     'last_used': null,
     'button': null,
-    'timer_coords': [240, 70],
+    'timer_coords': [285, 72],
     'sprite': null
   },
   'obnimashki': {
-    'price': 2000,
-    'last_used': null,
-    'button': null,
-    'timer_coords': [240, 100],
-  },
-  'roizman': {
     'price': 5000,
     'last_used': null,
     'button': null,
-    'timer_coords': [240, 130],
+    'timer_coords': [285, 108],
+  },
+  'roizman': {
+    'price': 10000,
+    'last_used': null,
+    'button': null,
+    'timer_coords': [285, 142]
   }
 };
 var enemies = [];
@@ -117,7 +117,18 @@ var tower;
 BasicGame.Boot.prototype =
 {
     preload: function () {
-        game.load.image('buy', '../img/buy.png');
+        // Да-да, это цены
+        game.load.image('buy-1000', '../img/buy/buy-1000.png');
+        game.load.image('buy-2000', '../img/buy/buy-2000.png');
+        game.load.image('buy-3000', '../img/buy/buy-3000.png');
+        game.load.image('buy-5000', '../img/buy/buy-5000.png');
+        game.load.image('buy-10000', '../img/buy/buy-10000.png');
+        // Да-да, дизэйбл
+        game.load.image('buy-disabled-1000', '../img/buy/buy-disabled-1000.png');
+        game.load.image('buy-disabled-2000', '../img/buy/buy-disabled-2000.png');
+        game.load.image('buy-disabled-3000', '../img/buy/buy-disabled-3000.png');
+        game.load.image('buy-disabled-5000', '../img/buy/buy-disabled-5000.png');
+        game.load.image('buy-disabled-10000', '../img/buy/buy-disabled-10000.png');
         game.load.image('tree1', '../img/tree1.png');
         game.load.image('tree2', '../img/tree2.png');
         game.load.image('road', '../img/road.png');
@@ -128,6 +139,8 @@ BasicGame.Boot.prototype =
         game.load.image('tower-flag', '../img/tower-flag.png');
         game.load.image('pickup-burning', '../img/pickup-burning.png');
         game.load.image('devyatka', '../img/devyatka.png');
+        game.load.image('money', '../img/money.png');
+        game.load.image('heart', '../img/heart.png');
         game.load.spritesheet('activist', '../img/activist.png', 32, 64, 8);
         game.load.spritesheet('thief', '../img/thief.png', 128, 184, 28);
         game.load.spritesheet('police', '../img/police.png', 128, 218, 5);
@@ -154,15 +167,15 @@ BasicGame.Boot.prototype =
         // Provide a 3D position for the cursor
         cursorPos = new Phaser.Plugin.Isometric.Point3();
 
-        var rectangle = new Phaser.Rectangle(game.width - 300, 10, 270, 20);
+        var rectangle = new Phaser.Rectangle(game.width - 230, 10, 170, 20);
         var bmd = game.add.bitmapData(game.width, game.height);
         bmd.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, '#2d2d2d');
         bmd.addToWorld();
 
         var barConfig = {
-            width: 266,
+            width: 166,
             height: 16,
-            x: game.width - 165,
+            x: game.width - 145,
             y: 20,
             bg: {
               color: '#8e2020'
@@ -178,9 +191,12 @@ BasicGame.Boot.prototype =
         healthBar.setPercent(health);
         spawnEnemy();
 
-        skills['roofers']['button'] = game.add.button(160, 55, 'buy', buyRoofers, this, 2, 1, 0);
-        skills['obnimashki']['button'] = game.add.button(160, 85, 'buy', buyObnimashki, this, 2, 1, 0);
-        skills['roizman']['button'] = game.add.button(160, 115, 'buy', buyRoizman, this, 2, 1, 0);
+        game.add.image(190, 55, "buy-disabled-3000");
+        game.add.image(190, 90, "buy-disabled-5000");
+        game.add.image(190, 125, "buy-disabled-10000");
+        skills['roofers']['button'] = game.add.button(190, 55, 'buy-3000', buyRoofers, this, 2, 1, 0);
+        skills['obnimashki']['button'] = game.add.button(190, 90, 'buy-5000', buyObnimashki, this, 2, 1, 0);
+        skills['roizman']['button'] = game.add.button(190, 125, 'buy-10000', buyRoizman, this, 2, 1, 0);
 
         document.addEventListener("startGame", startGame);
       },
@@ -222,12 +238,15 @@ BasicGame.Boot.prototype =
         }
     },
     render: function () {
-        game.debug.text(health, game.width - 180, 25, "#fff");
-        game.debug.text("Деньги госдепа: $ " + score, 2, 44, "#a7aebe");
+        game.add.image(game.width - 275, 5, 'heart');
+        game.add.image(game.width - 277, 55, "money");
+        game.debug.text(health, game.width - 160, 25, "#fff");
+        game.debug.text(score, game.width - 230, 74, "#a7aebe");
 
-        game.debug.text("Руферы: $1000", 2, 70, "#a7aebe");
-        game.debug.text("Обнимашки: $2000", 2, 100, "#a7aebe");
-        game.debug.text("Ройзман: $5000", 2, 130, "#a7aebe");
+        game.debug.text("Суперспособности:", 2, 25, "#a7aebe");
+        game.debug.text("Руферы (Freeze)", 2, 72, "#a7aebe");
+        game.debug.text("Обнимашки (+20 hp)", 2, 108, "#a7aebe");
+        game.debug.text("Ройзман (???)", 2, 142, "#a7aebe");
 
         for (skill in skills) {
           skills[skill].button.visible = skillIsAvailable(skill);
