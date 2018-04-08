@@ -71,6 +71,7 @@ var skills = {
     'timer_coords': [285, 142]
   }
 };
+var defender_price = 500
 var enemies = [];
 var defenders = [];
 
@@ -225,8 +226,8 @@ BasicGame.Boot.prototype =
             }
 
             if (tile.selected && game.input.activePointer.leftButton.isDown) {
-                if (score >= 50 && !([tile.isoBounds.x, tile.isoBounds.y] in map) && tile.key == 'grass_active'){
-                    score -= 50;
+                if (score >= defender_price && !([tile.isoBounds.x, tile.isoBounds.y] in map) && tile.key == 'grass_active'){
+                    score -= defender_price;
                     new Defender(tile);
                 }
             }
@@ -246,7 +247,7 @@ BasicGame.Boot.prototype =
         game.debug.text("Суперспособности:", 2, 25, "#a7aebe");
         game.debug.text("Руферы (Freeze)", 2, 72, "#a7aebe");
         game.debug.text("Обнимашки (+20 hp)", 2, 108, "#a7aebe");
-        game.debug.text("Ройзман (???)", 2, 142, "#a7aebe");
+        game.debug.text("Ройзман", 2, 142, "#a7aebe");
 
         for (skill in skills) {
           skills[skill].button.visible = skillIsAvailable(skill);
@@ -327,6 +328,7 @@ function Enemy(x, y){
     this.health = 100;
     this.speed = 1;
     this.damage = 10;
+    this.reward = 100;
     this.active = true;
     var path = mapRoad.slice();
     var target = path[0] || {
@@ -384,6 +386,7 @@ function Enemy(x, y){
         self.health = (result >= 0) ? result : 0;
         if(self.health<=0){
             self.damage = 0;
+            score += self.reward;
             target = {x:475, y:590};
             path = [target];
             // destroy();
@@ -426,6 +429,7 @@ function Thief(x, y){
     Enemy.call(this, x, y);
     this.health = 100;
     this.damage = 30;
+    this.reward = 1000;
 }
 
 function Police(x, y){
@@ -440,6 +444,7 @@ function Police(x, y){
     Enemy.call(this, x, y);
     this.health = 200;
     this.damage = 20;
+    this.reward = 2000;
 }
 
 function Defender(tile){
