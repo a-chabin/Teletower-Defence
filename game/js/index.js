@@ -449,7 +449,7 @@ function Police(x, y){
 function Defender(tile){
     var self = this;
     map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
-    this.damage = 10;
+    this.damage = 5;
     this.radius = 70;
     this.sprite = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 8, unitGroup);
     this.sprite.anchor.set(0.5, 1);
@@ -528,7 +528,8 @@ function spawnEnemy(gameClass){
 }
 function startGame(){
     console.log("start");
-    new Wave([Thief, 4, Police, 2], 1000, 2000);
+    new Wave([Thief, 35, Police, 15], [500, 2000], 2000);
+    new Wave([Thief, 65, Police, 35], [500, 2000], 60000);
 }
 
 
@@ -540,7 +541,7 @@ function distance(vec1, vec2) {
     return Math.sqrt(vec.x*vec.x + vec.y*vec.y);
 }
 
-function Wave(enemies, rate, pause, after) {
+function Wave(enemies, rate, pause) {
     var timerId;
     var pack = [];
     var enemy;
@@ -551,17 +552,13 @@ function Wave(enemies, rate, pause, after) {
         })
     }
 
-    var spawn = function() {
+    function spawn() {
         pack = pack.filter(function(a){return a.count>0});
         if(pack.length){
             enemy = pack[Math.floor(Math.random()*pack.length)];
             enemy.count-=1;
             spawnEnemy(enemy.class);
-        }else{
-
+            setTimeout(spawn, rate[0] + (rate[1]-rate[0])*Math.random());
         }
     }
-    setTimeout(function(){
-        timerId = setInterval(spawn, rate+Math.random()*rate*0.2-rate*0.1);
-    }, pause);
-}
+    setTimeout(spawn, pause);
