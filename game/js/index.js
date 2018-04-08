@@ -614,3 +614,4 @@ function Wave(enemies, rate, pause) {
         }
     }
     setTimeout(spawn, pause);
+}
