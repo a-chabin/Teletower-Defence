@@ -63,6 +63,7 @@ var skills = {
     'last_used': null,
     'button': null,
     'timer_coords': [285, 108],
+    'sprite': null
   },
   'roizman': {
     'price': 10000,
@@ -76,6 +77,10 @@ var enemies = [];
 var defenders = [];
 
 function skillIsAvailable(name) {
+  if (name === 'obnimashki' && health > 80) {
+      return false;
+  }
+
   return !skillIsActive(name) && score >= skills[name].price;
 }
 
@@ -100,7 +105,11 @@ function buyRoofers() {
 }
 
 function buyObnimashki() {
+  if (health > 80) return;
+
   buy('obnimashki');
+
+  heal(20);
 }
 
 function buyRoizman() {
@@ -142,6 +151,8 @@ BasicGame.Boot.prototype =
         game.load.image('devyatka', '../img/devyatka.png');
         game.load.image('money', '../img/money.png');
         game.load.image('heart', '../img/heart.png');
+        game.load.image('friends', '../img/friends.png');
+
         game.load.spritesheet('activist', '../img/activist.png', 32, 64, 8);
         game.load.spritesheet('thief', '../img/thief.png', 128, 184, 28);
         game.load.spritesheet('police', '../img/police.png', 128, 218, 5);
@@ -262,6 +273,16 @@ BasicGame.Boot.prototype =
               }
             }
 
+            if (skill === 'obnimashki') {
+                if (skills[skill].sprite != null) {
+                    skills[skill].sprite.visible = true;
+                } else {
+                    tile = game.add.isoSprite(90, 110, 0, 'friends', 0, isoGroup);
+                    tile.anchor.set(0.5, 1);
+                    skills[skill].sprite = tile;
+                }
+            }
+
             var x = skills[skill].timer_coords[0];
             var y = skills[skill].timer_coords[1];
 
@@ -270,7 +291,10 @@ BasicGame.Boot.prototype =
             if (skill === 'roofers' && skills[skill].sprite != null) {
               skills[skill].sprite.visible = false;
             }
-          }
+            if (skill === 'obnimashki' && skills[skill].sprite != null) {
+                skills[skill].sprite.visible = false;
+              }
+        }
         }
       },
     spawnTiles: function () {
@@ -518,7 +542,7 @@ function hurt(points) {
 }
 
 function heal(points) {
-    var result = health - points;
+    var result = health + points;
     health = (result < 100) ? result : 100;
     healthBar.setPercent(health);
 }
