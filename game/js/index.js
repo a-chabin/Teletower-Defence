@@ -602,14 +602,6 @@ function heal(points, speed) {
 function spawnEnemy(gameClass){
     new gameClass(mapRoad[0].x,mapRoad[0].y);
 }
-function startGame(){
-    console.log("start");
-    new Wave([Thief, 5, Police, 2], [1000, 2000], 2000);
-    new Wave([Thief, 10, Police, 8], [1000, 2000], 20000);
-    new Wave([Thief, 40, Police, 20], [1000, 2000], 40000);
-    new Wave([Boss, 200], [2000, 3000], 80000);
-    timer.start();
-}
 
 
 function distance(vec1, vec2) {
@@ -625,23 +617,70 @@ window.Thief=Thief;
 window.Police=Police;
 
 function Wave(enemies, rate, pause) {
+    var self = this;
     var pack = [];
-    var enemy;
-    for (var i = 0; i < enemies.length/2; i++) {
-        pack.push({
-            "class": enemies[2*i],
-            "count": enemies[2*i+1],
-        })
-    }
+    var current;
+    this.factor = 1;
+    this.finish = new Phaser.Signal();
 
     function spawn() {
         pack = pack.filter(function(a){return a.count>0});
         if(pack.length){
-            enemy = pack[Math.floor(Math.random()*pack.length)];
-            enemy.count-=1;
-            spawnEnemy(enemy.class);
+            current = pack[Math.floor(Math.random()*pack.length)];
+            current.count-=1;
+            spawnEnemy(current.class);
             timer.add(rate[0] + (rate[1]-rate[0])*Math.random(), spawn);
+        }else{
+            self.finish.dispatch();
         }
     }
-    timer.add(pause, spawn);
+    this.start = function(){
+        pack = [];
+        for (var i = 0; i < enemies.length/2; i++) {
+            pack.push({
+                "class": enemies[2*i],
+                "count": enemies[2*i+1] * self.factor,
+            })
+        }
+        timer.add(pause, spawn);
+    }
+}
+
+function Chain(waves, repeats, pause, count_factor) {
+    var self = this;
+    var queue = waves.slice();
+    var current;
+    this.factor = 1;
+    function startWave() {
+        if(queue.length > 0){
+            current = queue[0];
+            queue.shift();
+            current.finish.add(startWave);
+            current.factor = self.factor;
+            current.start();
+
+        }else{
+            if(repeats != 0){
+                self.factor = self.factor * count_factor;
+                timer.add(pause, startWave);
+                repeats--;
+                queue = waves.slice();
+            }
+        }
+    }
+    timer.add(0, startWave);
+}
+
+
+function startGame(){
+    console.log("start");
+    var waves = [
+        new Wave([Thief, 4], [1000, 2000], 2000),
+        new Wave([Thief, 8], [500, 1000], 8000),
+        new Wave([Police, 8], [1000, 2000], 16000),
+        new Wave([Thief, 16, Police, 16], [500, 1000], 16000),
+    ];
+    window.chain = new Chain(waves, -1, 10000, 4);
+
+    timer.start();
 }
