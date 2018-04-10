@@ -215,6 +215,8 @@ BasicGame.Boot.prototype =
         game.add.image(190, 55, "buy-disabled-3000");
         game.add.image(190, 90, "buy-disabled-5000");
         game.add.image(190, 125, "buy-disabled-10000");
+        game.add.image(game.width - 275, 5, 'heart');
+        game.add.image(game.width - 277, 55, "money");
         skills['roofers']['button'] = game.add.button(190, 55, 'buy-3000', buyRoofers, this, 2, 1, 0);
         skills['obnimashki']['button'] = game.add.button(190, 90, 'buy-5000', buyObnimashki, this, 2, 1, 0);
         skills['roizman']['button'] = game.add.button(190, 125, 'buy-10000', buyRoizman, this, 2, 1, 0);
@@ -266,8 +268,6 @@ BasicGame.Boot.prototype =
         }
     },
     render: function () {
-        game.add.image(game.width - 275, 5, 'heart');
-        game.add.image(game.width - 277, 55, "money");
         game.debug.text(health, game.width - 160, 25, "#fff");
         game.debug.text(score, game.width - 230, 74, "#a7aebe");
 
@@ -278,6 +278,11 @@ BasicGame.Boot.prototype =
 
         for (skill in skills) {
           skills[skill].button.visible = skillIsAvailable(skill);
+          if(skills[skill].button.input.pointerOver()){
+            skills[skill].button.tint = 0xbbffbb;
+          }else{
+            skills[skill].button.tint = 0xffffff;
+          }
 
           if (skillIsActive(skill) && skills[skill].last_used != null) {
             if (skill === 'roofers') {
@@ -303,7 +308,7 @@ BasicGame.Boot.prototype =
             var x = skills[skill].timer_coords[0];
             var y = skills[skill].timer_coords[1];
 
-            game.debug.text(Math.floor((Date.now() - skills[skill].last_used) / 1000) + " / 30", x, y, "#a7aebe");
+            game.debug.text(30-Math.floor((Date.now() - skills[skill].last_used) / 1000) + "с", x, y, "#a7aebe");
           } else {
             if (skill === 'roofers' && skills[skill].sprite != null) {
               skills[skill].sprite.visible = false;
