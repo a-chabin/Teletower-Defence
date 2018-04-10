@@ -278,6 +278,11 @@ BasicGame.Boot.prototype =
 
         for (skill in skills) {
           skills[skill].button.visible = skillIsAvailable(skill);
+          if(skills[skill].button.input.pointerOver()){
+            skills[skill].button.tint = 0xbbffbb;
+          }else{
+            skills[skill].button.tint = 0xffffff;
+          }
 
           if (skillIsActive(skill) && skills[skill].last_used != null) {
             if (skill === 'roofers') {
@@ -303,7 +308,7 @@ BasicGame.Boot.prototype =
             var x = skills[skill].timer_coords[0];
             var y = skills[skill].timer_coords[1];
 
-            game.debug.text(Math.floor((Date.now() - skills[skill].last_used) / 1000) + " / 30", x, y, "#a7aebe");
+            game.debug.text(30-Math.floor((Date.now() - skills[skill].last_used) / 1000) + "с", x, y, "#a7aebe");
           } else {
             if (skill === 'roofers' && skills[skill].sprite != null) {
               skills[skill].sprite.visible = false;
