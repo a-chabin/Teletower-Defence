@@ -246,7 +246,7 @@ BasicGame.Boot.prototype =
                 tile.tint = 0xffffff;
             }
 
-            if (tile.selected && game.input.activePointer.leftButton.isDown) {
+            if (tile.selected && game.input.activePointer.isDown) {
                 if (score >= defender_price && !([tile.isoBounds.x, tile.isoBounds.y] in map) && tile.key == 'grass_active'){
                     score -= defender_price;
                     new Defender(tile);
