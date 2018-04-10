@@ -1,6 +1,6 @@
 var game = new Phaser.Game(1024, 650, Phaser.AUTO, 'test', null, true, false);
 var health = 100,
-    score = 5000,
+    score = 2000,
     map = {};
 
 var BasicGame = function (game) {};
@@ -10,28 +10,28 @@ var isoGroup, unitGroup, cursorPos, cursor, healthBar;
 var tiles  = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 
     0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
-    0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 
-    0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 
-    0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 
-    0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 
-    0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
+    0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 0, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 
+    0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 0, 
+    0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 
+    0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0, 0, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 0, 0, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 0, 0, 0, 
+    0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 0, 0, 0, 
+    0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0, 0, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 
+    0, 0, 0, 2, 2, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
     4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
     4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
@@ -72,7 +72,7 @@ var skills = {
     'timer_coords': [285, 142]
   }
 };
-var defender_price = 500
+var defender_price = 1000
 var enemies = [];
 var defenders = [];
 
@@ -485,8 +485,9 @@ function Thief(x, y){
     this.anim.play(10, true);
     Enemy.call(this, x, y);
     this.health = 100;
-    this.damage = 20;
-    this.reward = 500;
+    this.damage = 40;
+    this.reward = 100;
+    this.speed = 60;
 }
 
 function Police(x, y){
@@ -500,8 +501,9 @@ function Police(x, y){
     this.anim.play(10, true);
     Enemy.call(this, x, y);
     this.health = 200;
-    this.damage = 40;
-    this.reward = 2000;
+    this.damage = 20;
+    this.reward = 200;
+    this.speed = 100;
 }
 
 function Boss(x, y){
@@ -514,15 +516,16 @@ function Boss(x, y){
     this.anim = this.sprite.animations.add('walk');
     this.anim.play(10, true);
     Enemy.call(this, x, y);
-    this.health = 4000;
+    this.health = 2000;
     this.damage = 40;
-    this.reward = 20000;
+    this.reward = 2000;
+    this.speed = 20;
 }
 
 function Defender(tile){
     var self = this;
     map[[tile.isoBounds.x, tile.isoBounds.y]] = 'activist';
-    this.damage = 5;
+    this.damage = 45;
     this.radius = 70;
     this.sprite = game.add.isoSprite(tile.isoBounds.x + 10, tile.isoBounds.y + 10, 0, 'activist', 8, unitGroup);
     this.sprite.anchor.set(0.5, 1);
@@ -600,15 +603,7 @@ function heal(points, speed) {
 }
 
 function spawnEnemy(gameClass){
-    new gameClass(mapRoad[0].x,mapRoad[0].y);
-}
-function startGame(){
-    console.log("start");
-    new Wave([Thief, 5, Police, 2], [1000, 2000], 2000);
-    new Wave([Thief, 10, Police, 8], [1000, 2000], 20000);
-    new Wave([Thief, 40, Police, 20], [1000, 2000], 40000);
-    new Wave([Boss, 200], [2000, 3000], 80000);
-    timer.start();
+    return new gameClass(mapRoad[0].x,mapRoad[0].y);
 }
 
 
@@ -625,23 +620,73 @@ window.Thief=Thief;
 window.Police=Police;
 
 function Wave(enemies, rate, pause) {
+    var self = this;
     var pack = [];
-    var enemy;
-    for (var i = 0; i < enemies.length/2; i++) {
-        pack.push({
-            "class": enemies[2*i],
-            "count": enemies[2*i+1],
-        })
-    }
+    var current;
+    this.factor = 1;
+    this.finish = new Phaser.Signal();
 
     function spawn() {
         pack = pack.filter(function(a){return a.count>0});
         if(pack.length){
-            enemy = pack[Math.floor(Math.random()*pack.length)];
-            enemy.count-=1;
-            spawnEnemy(enemy.class);
-            timer.add(rate[0] + (rate[1]-rate[0])*Math.random(), spawn);
+            current = pack[Math.floor(Math.random()*pack.length)];
+            current.count-=1;
+            var enemy = spawnEnemy(current.class);
+            enemy.speed = enemy.speed * Math.sqrt(self.factor);
+            timer.add((rate[0] + (rate[1]-rate[0])*Math.random())/self.factor, spawn);
+        }else{
+            self.finish.dispatch();
         }
     }
-    timer.add(pause, spawn);
+    this.start = function(){
+        pack = [];
+        for (var i = 0; i < enemies.length/2; i++) {
+            pack.push({
+                "class": enemies[2*i],
+                "count": enemies[2*i+1] * self.factor,
+            })
+        }
+        timer.add(pause, spawn);
+    }
+}
+
+function Chain(waves, repeats, pause, count_factor) {
+    var self = this;
+    var queue = waves.slice();
+    var current;
+    this.factor = 1;
+    function startWave() {
+        if(queue.length > 0){
+            current = queue[0];
+            queue.shift();
+            current.finish.add(startWave);
+            current.factor = self.factor;
+            current.start();
+
+        }else{
+            if(repeats != 0){
+                self.factor = self.factor * count_factor;
+                timer.add(pause, startWave);
+                repeats--;
+                queue = waves.slice();
+            }
+        }
+    }
+    timer.add(0, startWave);
+}
+
+
+function startGame(){
+    console.log("start");
+    var waves = [
+        new Wave([Thief, 2], [1000, 2000], 2000),
+        new Wave([Thief, 4], [1000, 2000], 16000),
+        new Wave([Police, 4], [1000, 2000], 16000),
+        new Wave([Thief, 8, Police, 4], [1000, 2000], 16000),
+        new Wave([Boss, 1], [2000, 4000], 16000),
+        new Wave([], [], 16000),
+    ];
+    window.chain = new Chain(waves, -1, 10000, 2);
+
+    timer.start();
 }
