@@ -77,7 +77,7 @@ var enemies = [];
 var defenders = [];
 
 function skillIsAvailable(name) {
-  if (name === 'obnimashki' && health > 80) {
+  if (name === 'obnimashki' && health >= 99) {
       return false;
   }
 
@@ -110,11 +110,11 @@ function buyRoofers() {
 }
 
 function buyObnimashki() {
-  if (health > 80) return;
+  if (health >= 99) return;
 
   buy('obnimashki');
 
-  heal(20);
+  heal(30, 2);
 }
 
 function buyRoizman() {
@@ -273,7 +273,7 @@ BasicGame.Boot.prototype =
 
         game.debug.text("Суперспособности:", 2, 25, "#a7aebe");
         game.debug.text("Руферы (Freeze)", 2, 72, "#a7aebe");
-        game.debug.text("Обнимашки (+20 hp)", 2, 108, "#a7aebe");
+        game.debug.text("Обнимашки (+30 hp)", 2, 108, "#a7aebe");
         game.debug.text("Ройзман", 2, 142, "#a7aebe");
 
         for (skill in skills) {
@@ -299,7 +299,7 @@ BasicGame.Boot.prototype =
                 if (skills[skill].sprite != null) {
                     skills[skill].sprite.visible = true;
                 } else {
-                    tile = game.add.isoSprite(110, 110, 0, 'friends', 0, isoGroup);
+                    tile = game.add.isoSprite(105, 110, 0, 'friends', 0, isoGroup);
                     tile.anchor.set(0.5, 1);
                     skills[skill].sprite = tile;
                 }
@@ -590,10 +590,13 @@ function hurt(points) {
     }
 }
 
-function heal(points) {
-    var result = health + points;
-    health = (result < 100) ? result : 100;
-    healthBar.setPercent(health);
+function heal(points, speed) {
+    if(points > 0){
+        var result = health + speed;
+        health = (result < 100) ? result : 100;
+        healthBar.setPercent(health);
+        timer.add(1000, heal.bind(this, points-speed, speed));
+    }
 }
 
 function spawnEnemy(gameClass){
