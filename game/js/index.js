@@ -134,6 +134,18 @@ var water = [];
 
 var tower;
 
+var healthbarEnemyConfig = {
+    width: 30,
+    height: 3,
+    bg: {
+      color: '#8e2020'
+    },
+    bar: {
+      color: '#fe0000'
+    },
+    animationDuration: 100,
+    flipped: false
+};
 BasicGame.Boot.prototype =
 {
     preload: function () {
@@ -194,7 +206,7 @@ BasicGame.Boot.prototype =
         bmd.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, '#2d2d2d');
         bmd.addToWorld();
 
-        var barConfig = {
+        var healthbarConfig = {
             width: 166,
             height: 16,
             x: game.width - 145,
@@ -209,7 +221,7 @@ BasicGame.Boot.prototype =
             flipped: false
         };
         game.input.mouse.capture = true;
-        healthBar = new HealthBar(game, barConfig);
+        healthBar = new HealthBar(game, healthbarConfig);
         healthBar.setPercent(health);
 
         game.add.image(190, 55, "buy-disabled-3000");
@@ -375,6 +387,9 @@ function Enemy(x, y){
     this.damage = 10;
     this.reward = 100;
     this.active = true;
+    var maxHealth = 0;
+    this.healthbar = new HealthBar(game, healthbarEnemyConfig);
+    this.healthbar.setPercent(100);
     var path = mapRoad.slice();
     var target = path[0] || {
         x: x,
@@ -402,6 +417,7 @@ function Enemy(x, y){
         game.iso.unproject(self.sprite, pos);
         self.sprite.isoX = pos.x;
         self.sprite.isoY = pos.y;
+        self.healthbar.setPosition(self.sprite.x, self.sprite.y-40)
         // tile = game.add.isoSprite(pos.x, pos.y, 0, 'thief', 28, unitGroup);
         };
     this.destroy = function(){
@@ -410,6 +426,7 @@ function Enemy(x, y){
             enemies.splice(idx, 1);
         }
         self.sprite.destroy();
+        self.healthbar.kill();
     };
     var getTarget = function(){
         var len = distance(target, self.sprite)
@@ -438,8 +455,10 @@ function Enemy(x, y){
         target.y = y;
     };
     this.hurt = function(points) {
+        maxHealth = Math.max(maxHealth, self.health);
         var result = self.health - points;
         self.health = (result >= 0) ? result : 0;
+        self.healthbar.setPercent(self.health/maxHealth*100);
         if(self.health<=0){
             self.damage = 0;
             score += self.reward;
@@ -447,6 +466,8 @@ function Enemy(x, y){
             path = [target];
             self.unfreeze();
             // destroy();
+            self.healthbar.bgSprite.visible = false;
+            self.healthbar.barSprite.visible = false;
             return;
         }
         if(self.sprite.tint == 0xffffff){
