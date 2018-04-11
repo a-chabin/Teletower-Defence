@@ -6,6 +6,8 @@ var health = 100,
 var BasicGame = function (game) {};
 BasicGame.Boot = function (game) {};
 
+var statictics;
+
 var isoGroup, unitGroup, cursorPos, cursor, healthBar;
 var tiles  = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -188,6 +190,7 @@ BasicGame.Boot.prototype =
         game.iso.anchor.setTo(0.5, 0.3);
     },
     create: function () {
+        statictics = new Statictics();
         // Create a group for our tiles.
         isoGroup = game.add.group();
         isoGroup.enableBody = true;
@@ -271,6 +274,8 @@ BasicGame.Boot.prototype =
 
         if (health <= 0) {
             end();
+        }else{
+            statictics.update();
         }
 
         if (!skillIsActive('roofers')) {
@@ -288,6 +293,9 @@ BasicGame.Boot.prototype =
         game.debug.text("Обнимашки (+30 hp)", 2, 108, "#a7aebe");
         game.debug.text("Ройзман", 2, 142, "#a7aebe");
 
+        game.debug.text("time "+ statictics.getTime(), 2, 170, "#a7aebe");
+        game.debug.text("kills "+ statictics.kills, 2, 190, "#a7aebe");
+        game.debug.text("money "+ statictics.money, 2, 210, "#a7aebe");
         for (skill in skills) {
           skills[skill].button.visible = skillIsAvailable(skill);
           if(skills[skill].button.input.pointerOver()){
@@ -462,12 +470,14 @@ function Enemy(x, y){
         if(self.health<=0){
             self.damage = 0;
             score += self.reward;
+            statictics.money += self.reward;
             target = {x:475, y:590};
             path = [target];
             self.unfreeze();
             // destroy();
             self.healthbar.bgSprite.visible = false;
             self.healthbar.barSprite.visible = false;
+            statictics.kills++;
             return;
         }
         if(self.sprite.tint == 0xffffff){
@@ -700,6 +710,17 @@ function Chain(waves, repeats, pause, count_factor) {
     timer.add(0, startWave);
 }
 
+function Statictics(){
+    var time = 0;
+    this.getTime = function(){
+        return Math.floor(time / 1000);
+    }
+    this.update = function(){
+        time += game.time.elapsed;
+    }
+    this.money = 0;
+    this.kills = 0;
+}
 
 function startGame(){
     console.log("start");
