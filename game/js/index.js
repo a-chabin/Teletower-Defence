@@ -524,7 +524,7 @@ function Police(x, y){
     this.health = 200;
     this.damage = 20;
     this.reward = 200;
-    this.speed = 100;
+    this.speed = 90;
 }
 
 function Boss(x, y){
@@ -657,8 +657,8 @@ function Wave(enemies, rate, pause) {
             current = pack[Math.floor(Math.random()*pack.length)];
             current.count-=1;
             var enemy = spawnEnemy(current.class);
-            enemy.speed = enemy.speed * Math.sqrt(self.factor);
-            timer.add((rate[0] + (rate[1]-rate[0])*Math.random())/self.factor, spawn);
+            enemy.health = enemy.health * self.factor;
+            timer.add((rate[0] + (rate[1]-rate[0])*Math.random()), spawn);
         }else{
             self.finish.dispatch();
         }
@@ -671,7 +671,7 @@ function Wave(enemies, rate, pause) {
                 "count": enemies[2*i+1] * self.factor,
             })
         }
-        timer.add(pause, spawn);
+        timer.add(pause / Math.sqrt(self.factor), spawn);
     }
 }
 
@@ -704,11 +704,11 @@ function Chain(waves, repeats, pause, count_factor) {
 function startGame(){
     console.log("start");
     var waves = [
-        new Wave([Thief, 2], [1000, 2000], 2000),
-        new Wave([Thief, 4], [1000, 2000], 16000),
-        new Wave([Police, 4], [1000, 2000], 16000),
-        new Wave([Thief, 8, Police, 4], [1000, 2000], 16000),
-        new Wave([Boss, 1], [2000, 4000], 16000),
+        new Wave([Thief, 2], [1000, 2000], 1000),
+        new Wave([Thief, 4], [1000, 2000], 8000),
+        new Wave([Police, 4], [1000, 2000], 8000),
+        new Wave([Thief, 8, Police, 4], [1000, 2000], 8000),
+        new Wave([Boss, 1], [2000, 4000], 8000),
         new Wave([], [], 16000),
     ];
     window.chain = new Chain(waves, -1, 10000, 2);
