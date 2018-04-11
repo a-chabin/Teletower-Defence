@@ -608,9 +608,13 @@ function spawnEnemy(gameClass){
 
 
 function distance(vec1, vec2) {
+    var iso1={x:0,y:0};
+    var iso2={x:0,y:0};
+    game.iso.unproject(vec1, iso1);
+    game.iso.unproject(vec2, iso2);
     var vec = {
-        x: vec1.x - vec2.x,
-        y: vec1.y - vec2.y,
+        x: iso1.x - iso2.x,
+        y: iso1.y - iso2.y,
     }
     return Math.sqrt(vec.x*vec.x + vec.y*vec.y);
 }
