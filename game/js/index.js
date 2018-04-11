@@ -134,6 +134,18 @@ var water = [];
 
 var tower;
 
+var healthbarEnemyConfig = {
+    width: 30,
+    height: 3,
+    bg: {
+      color: '#8e2020'
+    },
+    bar: {
+      color: '#fe0000'
+    },
+    animationDuration: 100,
+    flipped: false
+};
 BasicGame.Boot.prototype =
 {
     preload: function () {
@@ -194,7 +206,7 @@ BasicGame.Boot.prototype =
         bmd.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, '#2d2d2d');
         bmd.addToWorld();
 
-        var barConfig = {
+        var healthbarConfig = {
             width: 166,
             height: 16,
             x: game.width - 145,
@@ -209,7 +221,7 @@ BasicGame.Boot.prototype =
             flipped: false
         };
         game.input.mouse.capture = true;
-        healthBar = new HealthBar(game, barConfig);
+        healthBar = new HealthBar(game, healthbarConfig);
         healthBar.setPercent(health);
 
         game.add.image(190, 55, "buy-disabled-3000");
@@ -375,6 +387,9 @@ function Enemy(x, y){
     this.damage = 10;
     this.reward = 100;
     this.active = true;
+    var maxHealth = 0;
+    this.healthbar = new HealthBar(game, healthbarEnemyConfig);
+    this.healthbar.setPercent(100);
     var path = mapRoad.slice();
     var target = path[0] || {
         x: x,
@@ -402,6 +417,7 @@ function Enemy(x, y){
         game.iso.unproject(self.sprite, pos);
         self.sprite.isoX = pos.x;
         self.sprite.isoY = pos.y;
+        self.healthbar.setPosition(self.sprite.x, self.sprite.y-40)
         // tile = game.add.isoSprite(pos.x, pos.y, 0, 'thief', 28, unitGroup);
         };
     this.destroy = function(){
@@ -410,6 +426,7 @@ function Enemy(x, y){
             enemies.splice(idx, 1);
         }
         self.sprite.destroy();
+        self.healthbar.kill();
     };
     var getTarget = function(){
         var len = distance(target, self.sprite)
@@ -438,8 +455,10 @@ function Enemy(x, y){
         target.y = y;
     };
     this.hurt = function(points) {
+        maxHealth = Math.max(maxHealth, self.health);
         var result = self.health - points;
         self.health = (result >= 0) ? result : 0;
+        self.healthbar.setPercent(self.health/maxHealth*100);
         if(self.health<=0){
             self.damage = 0;
             score += self.reward;
@@ -447,6 +466,8 @@ function Enemy(x, y){
             path = [target];
             self.unfreeze();
             // destroy();
+            self.healthbar.bgSprite.visible = false;
+            self.healthbar.barSprite.visible = false;
             return;
         }
         if(self.sprite.tint == 0xffffff){
@@ -503,7 +524,7 @@ function Police(x, y){
     this.health = 200;
     this.damage = 20;
     this.reward = 200;
-    this.speed = 100;
+    this.speed = 90;
 }
 
 function Boss(x, y){
@@ -608,9 +629,13 @@ function spawnEnemy(gameClass){
 
 
 function distance(vec1, vec2) {
+    var iso1={x:0,y:0};
+    var iso2={x:0,y:0};
+    game.iso.unproject(vec1, iso1);
+    game.iso.unproject(vec2, iso2);
     var vec = {
-        x: vec1.x - vec2.x,
-        y: vec1.y - vec2.y,
+        x: iso1.x - iso2.x,
+        y: iso1.y - iso2.y,
     }
     return Math.sqrt(vec.x*vec.x + vec.y*vec.y);
 }
@@ -632,8 +657,8 @@ function Wave(enemies, rate, pause) {
             current = pack[Math.floor(Math.random()*pack.length)];
             current.count-=1;
             var enemy = spawnEnemy(current.class);
-            enemy.speed = enemy.speed * Math.sqrt(self.factor);
-            timer.add((rate[0] + (rate[1]-rate[0])*Math.random())/self.factor, spawn);
+            enemy.health = enemy.health * self.factor;
+            timer.add((rate[0] + (rate[1]-rate[0])*Math.random()), spawn);
         }else{
             self.finish.dispatch();
         }
@@ -646,7 +671,7 @@ function Wave(enemies, rate, pause) {
                 "count": enemies[2*i+1] * self.factor,
             })
         }
-        timer.add(pause, spawn);
+        timer.add(pause / Math.sqrt(self.factor), spawn);
     }
 }
 
@@ -679,11 +704,11 @@ function Chain(waves, repeats, pause, count_factor) {
 function startGame(){
     console.log("start");
     var waves = [
-        new Wave([Thief, 2], [1000, 2000], 2000),
-        new Wave([Thief, 4], [1000, 2000], 16000),
-        new Wave([Police, 4], [1000, 2000], 16000),
-        new Wave([Thief, 8, Police, 4], [1000, 2000], 16000),
-        new Wave([Boss, 1], [2000, 4000], 16000),
+        new Wave([Thief, 2], [1000, 2000], 1000),
+        new Wave([Thief, 4], [1000, 2000], 8000),
+        new Wave([Police, 4], [1000, 2000], 8000),
+        new Wave([Thief, 8, Police, 4], [1000, 2000], 8000),
+        new Wave([Boss, 1], [2000, 4000], 8000),
         new Wave([], [], 16000),
     ];
     window.chain = new Chain(waves, -1, 10000, 2);
