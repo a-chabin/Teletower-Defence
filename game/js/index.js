@@ -78,6 +78,11 @@ var defender_price = 1000
 var enemies = [];
 var defenders = [];
 
+var guiText = {
+    style: { font: "16px IBM Plex Mono", fontWeight: "bold", fill:"#000"},
+    whiteStyle: { font: "16px IBM Plex Mono", fontWeight: "bold", fill:"#fff"},
+}
+
 function skillIsAvailable(name) {
   if (name === 'obnimashki' && health >= 99) {
       return false;
@@ -237,6 +242,14 @@ BasicGame.Boot.prototype =
         skills['roizman']['button'] = game.add.button(190, 125, 'buy-10000', buyRoizman, this, 2, 1, 0);
 
         document.addEventListener("startGame", startGame);
+
+        game.add.text(2, 20, "Суперспособности:", guiText.style);
+        game.add.text(2, 60, "Руферы (Freeze)", guiText.style);
+        game.add.text(2, 95, "Обнимашки (+30 hp)", guiText.style);
+        game.add.text(2, 130, "Ройзман", guiText.style);
+        guiText.health = game.add.text(game.width - 160, 10, health, guiText.whiteStyle);
+        guiText.score = game.add.text(game.width - 230, 60, score, guiText.style);
+        
         timer = game.time.create(false);
       },
     update: function () {
@@ -285,13 +298,8 @@ BasicGame.Boot.prototype =
         }
     },
     render: function () {
-        game.debug.text(health, game.width - 160, 25, "#fff");
-        game.debug.text(score, game.width - 230, 74, "#a7aebe");
-
-        game.debug.text("Суперспособности:", 2, 25, "#a7aebe");
-        game.debug.text("Руферы (Freeze)", 2, 72, "#a7aebe");
-        game.debug.text("Обнимашки (+30 hp)", 2, 108, "#a7aebe");
-        game.debug.text("Ройзман", 2, 142, "#a7aebe");
+        guiText.health.text = health;
+        guiText.score.text = score;
 
         game.debug.text("time "+ statictics.getTime(), 2, 170, "#a7aebe");
         game.debug.text("kills "+ statictics.kills, 2, 190, "#a7aebe");
