@@ -93,7 +93,7 @@ function skillIsAvailable(name) {
 
 function skillIsActive(name) {
   if (skills[name].last_used != null) {
-    return (Date.now() - skills[name].last_used) < 30 * 1000;
+    return (statictics.getTime()*1000 - skills[name].last_used) < 30 * 1000;
   }
   return false;
 }
@@ -104,7 +104,7 @@ function buy(skill) {
 
   if (score < price) return;
   score -= price;
-  skill_data.last_used = Date.now();
+  skill_data.last_used = statictics.getTime()*1000;
 }
 
 function buyRoofers() {
@@ -336,7 +336,7 @@ BasicGame.Boot.prototype =
             var x = skills[skill].timer_coords[0];
             var y = skills[skill].timer_coords[1];
 
-            game.debug.text(30-Math.floor((Date.now() - skills[skill].last_used) / 1000) + "с", x, y, "#a7aebe");
+            game.debug.text(30-Math.floor((statictics.getTime()*1000 - skills[skill].last_used) / 1000) + "с", x, y, "#a7aebe");
           } else {
             if (skill === 'roofers' && skills[skill].sprite != null) {
               skills[skill].sprite.visible = false;
