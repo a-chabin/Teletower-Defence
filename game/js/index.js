@@ -57,21 +57,21 @@ var skills = {
     'price': 3000,
     'last_used': null,
     'button': null,
-    'timer_coords': [285, 72],
+    'timer_coords': [285, 60],
     'sprite': null
   },
   'obnimashki': {
     'price': 5000,
     'last_used': null,
     'button': null,
-    'timer_coords': [285, 108],
+    'timer_coords': [285, 95],
     'sprite': null
   },
   'roizman': {
     'price': 10000,
     'last_used': null,
     'button': null,
-    'timer_coords': [285, 142]
+    'timer_coords': [285, 130]
   }
 };
 var defender_price = 1000
@@ -249,6 +249,11 @@ BasicGame.Boot.prototype =
         game.add.text(2, 130, "Ройзман", guiText.style);
         guiText.health = game.add.text(game.width - 160, 10, health, guiText.whiteStyle);
         guiText.score = game.add.text(game.width - 230, 60, score, guiText.style);
+
+        guiText.skills = {}
+        for (skill in skills) {
+            guiText.skills[skill] = game.add.text(skills[skill].timer_coords[0], skills[skill].timer_coords[1], "", guiText.style);
+        }
         
         timer = game.time.create(false);
       },
@@ -332,11 +337,7 @@ BasicGame.Boot.prototype =
                     skills[skill].sprite = tile;
                 }
             }
-
-            var x = skills[skill].timer_coords[0];
-            var y = skills[skill].timer_coords[1];
-
-            game.debug.text(30-Math.floor((statictics.getTime()*1000 - skills[skill].last_used) / 1000) + "с", x, y, "#a7aebe");
+            guiText.skills[skill].text = 30-Math.floor((statictics.getTime()*1000 - skills[skill].last_used) / 1000) + "с";
           } else {
             if (skill === 'roofers' && skills[skill].sprite != null) {
               skills[skill].sprite.visible = false;
