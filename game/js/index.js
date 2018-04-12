@@ -316,7 +316,7 @@ BasicGame.Boot.prototype =
           }else{
             skills[skill].button.tint = 0xffffff;
           }
-
+          guiText.skills[skill].text = "";
           if (skillIsActive(skill) && skills[skill].last_used != null) {
             if (skill === 'roofers') {
               if (skills[skill].sprite != null) {
