@@ -7,6 +7,7 @@ var BasicGame = function (game) {};
 BasicGame.Boot = function (game) {};
 
 var statictics;
+var timeText;
 
 var isoGroup, unitGroup, cursorPos, cursor, healthBar;
 var tiles  = [
@@ -57,21 +58,21 @@ var skills = {
     'price': 3000,
     'last_used': null,
     'button': null,
-    'timer_coords': [285, 60],
+    'timer_coords': [300, 65],
     'sprite': null
   },
   'obnimashki': {
     'price': 5000,
     'last_used': null,
     'button': null,
-    'timer_coords': [285, 95],
+    'timer_coords': [300, 110],
     'sprite': null
   },
   'roizman': {
     'price': 10000,
     'last_used': null,
     'button': null,
-    'timer_coords': [285, 130]
+    'timer_coords': [300, 155]
   }
 };
 var defender_price = 1000
@@ -79,8 +80,10 @@ var enemies = [];
 var defenders = [];
 
 var guiText = {
-    style: { font: "16px IBM Plex Mono", fontWeight: "bold", fill:"#000"},
-    whiteStyle: { font: "16px IBM Plex Mono", fontWeight: "bold", fill:"#fff"},
+    style: { font: "16px IBM Plex Mono", fontWeight: "500", fill:"#000"},
+    boldStyle: { font: "16px IBM Plex Mono", fontWeight: "700", fill:"#000"},
+    largeStyle: { font: "80px IBM Plex Mono", fontWeight: "700", fill:"#000"},
+    whiteStyle: { font: "16px IBM Plex Mono", fontWeight: "500", fill:"#fff"},
 }
 
 function skillIsAvailable(name) {
@@ -232,21 +235,25 @@ BasicGame.Boot.prototype =
         healthBar = new HealthBar(game, healthbarConfig);
         healthBar.setPercent(health);
 
-        game.add.image(190, 55, "buy-disabled-3000");
-        game.add.image(190, 90, "buy-disabled-5000");
-        game.add.image(190, 125, "buy-disabled-10000");
+        game.add.image(210, 60, "buy-disabled-3000");
+        game.add.image(210, 105, "buy-disabled-5000");
+        game.add.image(210, 150, "buy-disabled-10000");
         game.add.image(game.width - 275, 5, 'heart');
         game.add.image(game.width - 277, 55, "money");
-        skills['roofers']['button'] = game.add.button(190, 55, 'buy-3000', buyRoofers, this, 2, 1, 0);
-        skills['obnimashki']['button'] = game.add.button(190, 90, 'buy-5000', buyObnimashki, this, 2, 1, 0);
-        skills['roizman']['button'] = game.add.button(190, 125, 'buy-10000', buyRoizman, this, 2, 1, 0);
+        skills['roofers']['button'] = game.add.button(210, 60, 'buy-3000', buyRoofers, this, 2, 1, 0);
+        skills['obnimashki']['button'] = game.add.button(210, 105, 'buy-5000', buyObnimashki, this, 2, 1, 0);
+        skills['roizman']['button'] = game.add.button(210, 150, 'buy-10000', buyRoizman, this, 2, 1, 0);
 
         document.addEventListener("startGame", startGame);
 
-        game.add.text(2, 20, "Суперспособности:", guiText.style);
-        game.add.text(2, 60, "Руферы (Freeze)", guiText.style);
-        game.add.text(2, 95, "Обнимашки (+30 hp)", guiText.style);
-        game.add.text(2, 130, "Ройзман", guiText.style);
+        game.add.text(2, 20, "Суперспособности", guiText.boldStyle);
+        game.add.text(2, 65, "Руферы (Freeze)", guiText.style);
+        game.add.text(2, 110, "Обнимашки (+30 hp)", guiText.style);
+        game.add.text(2, 155, "Ройзман", guiText.style);
+
+        timeText = game.add.text(2, 650 - 150, "", guiText.largeStyle);
+        game.add.text(2, 650 - 30, "Башня продержалась", guiText.style);
+        
         guiText.health = game.add.text(game.width - 160, 10, health, guiText.whiteStyle);
         guiText.score = game.add.text(game.width - 230, 60, score, guiText.style);
 
@@ -306,8 +313,8 @@ BasicGame.Boot.prototype =
         guiText.health.text = health;
         guiText.score.text = score;
 
-        game.debug.text("time "+ statictics.getTime(), 2, 170, "#a7aebe");
-        game.debug.text("kills "+ statictics.kills, 2, 190, "#a7aebe");
+        timeText.setText(statictics.getTime());
+        
         game.debug.text("money "+ statictics.money, 2, 210, "#a7aebe");
         for (skill in skills) {
           skills[skill].button.visible = skillIsAvailable(skill);
