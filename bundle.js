@@ -139,34 +139,34 @@ BasicGame.Boot.prototype =
 {
     preload: function () {
         // Да-да, это цены
-        game.load.image('buy-1000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-1000.png');
-        game.load.image('buy-2000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-2000.png');
-        game.load.image('buy-3000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-3000.png');
-        game.load.image('buy-5000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-5000.png');
-        game.load.image('buy-10000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-10000.png');
+        game.load.image('buy-1000', './img/buy/buy-1000.png');
+        game.load.image('buy-2000', './img/buy/buy-2000.png');
+        game.load.image('buy-3000', './img/buy/buy-3000.png');
+        game.load.image('buy-5000', './img/buy/buy-5000.png');
+        game.load.image('buy-10000', './img/buy/buy-10000.png');
         // Да-да, дизэйбл
-        game.load.image('buy-disabled-1000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-disabled-1000.png');
-        game.load.image('buy-disabled-2000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-disabled-2000.png');
-        game.load.image('buy-disabled-3000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-disabled-3000.png');
-        game.load.image('buy-disabled-5000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-disabled-5000.png');
-        game.load.image('buy-disabled-10000', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/buy/buy-disabled-10000.png');
-        game.load.image('tree1', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/tree1.png');
-        game.load.image('tree2', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/tree2.png');
-        game.load.image('road', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/road.png');
-        game.load.image('grass', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/grass.png');
-        game.load.image('grass_active', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/grass_active.png');
-        game.load.image('water', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/water.png');
-        game.load.image('tower', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/tower.png');
-        game.load.image('tower-flag', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/tower-flag.png');
-        game.load.image('pickup-burning', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/pickup-burning.png');
-        game.load.image('devyatka', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/devyatka.png');
-        game.load.image('money', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/money.png');
-        game.load.image('heart', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/heart.png');
-        game.load.image('friends', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/friends.png');
+        game.load.image('buy-disabled-1000', './img/buy/buy-disabled-1000.png');
+        game.load.image('buy-disabled-2000', './img/buy/buy-disabled-2000.png');
+        game.load.image('buy-disabled-3000', './img/buy/buy-disabled-3000.png');
+        game.load.image('buy-disabled-5000', './img/buy/buy-disabled-5000.png');
+        game.load.image('buy-disabled-10000', './img/buy/buy-disabled-10000.png');
+        game.load.image('tree1', './img/tree1.png');
+        game.load.image('tree2', './img/tree2.png');
+        game.load.image('road', './img/road.png');
+        game.load.image('grass', './img/grass.png');
+        game.load.image('grass_active', './img/grass_active.png');
+        game.load.image('water', './img/water.png');
+        game.load.image('tower', './img/tower.png');
+        game.load.image('tower-flag', './img/tower-flag.png');
+        game.load.image('pickup-burning', './img/pickup-burning.png');
+        game.load.image('devyatka', './img/devyatka.png');
+        game.load.image('money', './img/money.png');
+        game.load.image('heart', './img/heart.png');
+        game.load.image('friends', './img/friends.png');
 
-        game.load.spritesheet('activist', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/activist.png', 32, 64, 8);
-        game.load.spritesheet('thief', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/thief.png', 128, 184, 28);
-        game.load.spritesheet('police', 'http://tech.skbkontur.ru/hackathon-2018.1-team35/img/police.png', 128, 218, 5);
+        game.load.spritesheet('activist', './img/activist.png', 32, 64, 8);
+        game.load.spritesheet('thief', './img/thief.png', 128, 184, 28);
+        game.load.spritesheet('police', './img/police.png', 128, 218, 5);
 
         game.time.advancedTiming = true;
         game.plugins.add(new Phaser.Plugin.Isometric(game));
