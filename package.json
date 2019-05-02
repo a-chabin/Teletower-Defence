@@ -4,17 +4,15 @@
   "description": "hello",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/skbkontur/hackathon-2018.1-team35.git"
+    "start": "npx serve ./build",
+    "build": "npx pnkit sync",
+    "watch": "npm run build && npx pnkit watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/skbkontur/hackathon-2018.1-team35/issues"
-  },
-  "homepage": "https://github.com/skbkontur/hackathon-2018.1-team35#readme"
+  "dependencies": {
+    "phaser-node-kit": "^2.2.0",
+    "serve": "^11.0.0"
+  }
 }
