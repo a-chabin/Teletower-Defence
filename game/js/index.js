@@ -315,7 +315,6 @@ BasicGame.Boot.prototype =
 
         timeText.setText(statictics.getTime());
         
-        game.debug.text("money "+ statictics.money, 2, 210, "#a7aebe");
         for (skill in skills) {
           skills[skill].button.visible = skillIsAvailable(skill);
           if(skills[skill].button.input.pointerOver()){
