@@ -6,6 +6,7 @@ var health = 100,
 var BasicGame = function (game) {};
 BasicGame.Boot = function (game) {};
 
+var isGameStart = false;
 var statictics;
 var timeText;
 
@@ -160,34 +161,34 @@ BasicGame.Boot.prototype =
 {
     preload: function () {
         // Да-да, это цены
-        game.load.image('buy-1000', '../img/buy/buy-1000.png');
-        game.load.image('buy-2000', '../img/buy/buy-2000.png');
-        game.load.image('buy-3000', '../img/buy/buy-3000.png');
-        game.load.image('buy-5000', '../img/buy/buy-5000.png');
-        game.load.image('buy-10000', '../img/buy/buy-10000.png');
+        game.load.image('buy-1000', './img/buy/buy-1000.png');
+        game.load.image('buy-2000', './img/buy/buy-2000.png');
+        game.load.image('buy-3000', './img/buy/buy-3000.png');
+        game.load.image('buy-5000', './img/buy/buy-5000.png');
+        game.load.image('buy-10000', './img/buy/buy-10000.png');
         // Да-да, дизэйбл
-        game.load.image('buy-disabled-1000', '../img/buy/buy-disabled-1000.png');
-        game.load.image('buy-disabled-2000', '../img/buy/buy-disabled-2000.png');
-        game.load.image('buy-disabled-3000', '../img/buy/buy-disabled-3000.png');
-        game.load.image('buy-disabled-5000', '../img/buy/buy-disabled-5000.png');
-        game.load.image('buy-disabled-10000', '../img/buy/buy-disabled-10000.png');
-        game.load.image('tree1', '../img/tree1.png');
-        game.load.image('tree2', '../img/tree2.png');
-        game.load.image('road', '../img/road.png');
-        game.load.image('grass', '../img/grass.png');
-        game.load.image('grass_active', '../img/grass_active.png');
-        game.load.image('water', '../img/water.png');
-        game.load.image('tower', '../img/tower.png');
-        game.load.image('tower-flag', '../img/tower-flag.png');
-        game.load.image('pickup-burning', '../img/pickup-burning.png');
-        game.load.image('devyatka', '../img/devyatka.png');
-        game.load.image('money', '../img/money.png');
-        game.load.image('heart', '../img/heart.png');
-        game.load.image('friends', '../img/friends.png');
+        game.load.image('buy-disabled-1000', './img/buy/buy-disabled-1000.png');
+        game.load.image('buy-disabled-2000', './img/buy/buy-disabled-2000.png');
+        game.load.image('buy-disabled-3000', './img/buy/buy-disabled-3000.png');
+        game.load.image('buy-disabled-5000', './img/buy/buy-disabled-5000.png');
+        game.load.image('buy-disabled-10000', './img/buy/buy-disabled-10000.png');
+        game.load.image('tree1', './img/tree1.png');
+        game.load.image('tree2', './img/tree2.png');
+        game.load.image('road', './img/road.png');
+        game.load.image('grass', './img/grass.png');
+        game.load.image('grass_active', './img/grass_active.png');
+        game.load.image('water', './img/water.png');
+        game.load.image('tower', './img/tower.png');
+        game.load.image('tower-flag', './img/tower-flag.png');
+        game.load.image('pickup-burning', './img/pickup-burning.png');
+        game.load.image('devyatka', './img/devyatka.png');
+        game.load.image('money', './img/money.png');
+        game.load.image('heart', './img/heart.png');
+        game.load.image('friends', './img/friends.png');
 
-        game.load.spritesheet('activist', '../img/activist.png', 32, 64, 8);
-        game.load.spritesheet('thief', '../img/thief.png', 128, 184, 28);
-        game.load.spritesheet('police', '../img/police.png', 128, 218, 5);
+        game.load.spritesheet('activist', './img/activist.png', 32, 64, 8);
+        game.load.spritesheet('thief', './img/thief.png', 128, 184, 28);
+        game.load.spritesheet('police', './img/police.png', 128, 218, 5);
 
         game.time.advancedTiming = true;
         game.plugins.add(new Phaser.Plugin.Isometric(game));
@@ -198,7 +199,6 @@ BasicGame.Boot.prototype =
         game.iso.anchor.setTo(0.5, 0.3);
     },
     create: function () {
-        statictics = new Statictics();
         // Create a group for our tiles.
         isoGroup = game.add.group();
         isoGroup.enableBody = true;
@@ -300,9 +300,11 @@ BasicGame.Boot.prototype =
         if (health <= 0) {
             end();
         }else{
-            statictics.update();
+            if (isGameStart) {
+                statictics.update();
+            }
         }
-
+        
         if (!skillIsActive('roofers')) {
             for (var i = 0; i < enemies.length; i++) {
                 enemies[i].unfreeze();
@@ -313,7 +315,9 @@ BasicGame.Boot.prototype =
         guiText.health.text = health;
         guiText.score.text = score;
 
-        timeText.setText(statictics.getTime());
+        if (isGameStart) {
+            timeText.setText(statictics.getTime());
+        }
         
         for (skill in skills) {
           skills[skill].button.visible = skillIsAvailable(skill);
@@ -738,7 +742,9 @@ function Statictics(){
 }
 
 function startGame(){
-    console.log("start");
+    isGameStart = true;
+    statictics = new Statictics();
+
     var waves = [
         new Wave([Thief, 2], [1000, 2000], 1000),
         new Wave([Thief, 4], [1000, 2000], 8000),
