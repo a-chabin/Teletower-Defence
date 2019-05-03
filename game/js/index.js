@@ -1,3 +1,10 @@
+var startScreen = document.getElementById('start-screen'),
+    endScreen = document.getElementById('end-screen'),
+    audio = new Audio('./audio/karliki.mp3'),
+    audioPrivet = new Audio('./audio/vsemprivet.mp3'),
+    videoContainer = document.getElementById('video');
+
+document.querySelector('.js-button-start').addEventListener('click', () => start());
 
 var game = new Phaser.Game(1024, 650, Phaser.AUTO, 'gameContainer', null, true, false);
 
@@ -762,4 +769,25 @@ function startGame(){
     window.chain = new Chain(waves, -1, 10000, 2);
 
     timer.start();
+}
+
+function start() {
+    document.dispatchEvent(new CustomEvent('startGame'));
+    startScreen.classList.add('hide');
+    endScreen.classList.add('hide');
+    audio.play();
+}
+
+function end() {
+    document.querySelector('video').play();
+    startScreen.classList.add('hide');
+    endScreen.classList.remove('hide');
+}
+
+function epic() {
+    audioPrivet.play();
+    document.body.classList.add('roizman');
+    setTimeout(function () {
+        document.body.classList.remove('roizman');
+    }, 2200);
 }

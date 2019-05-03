@@ -31,7 +31,7 @@
                 настрой и&nbsp;отступать.</p>
 
             <div style="text-align: center;">
-                <button onclick="start()" autofocus tabindex="0">Начать игру</button>
+                <button class="js-button-start" autofocus tabindex="0">Начать игру</button>
             </div>
 
             <div class="note">
@@ -54,34 +54,6 @@
 
     <div class="game-container" id="gameContainer"></div>
 
-    <script>
-        var startScreen = document.getElementById('start-screen'),
-            endScreen = document.getElementById('end-screen'),
-            audio = new Audio('./audio/karliki.mp3'),
-            audioPrivet = new Audio('./audio/vsemprivet.mp3'),
-            videoContainer = document.getElementById('video');
-
-        function start() {
-            document.dispatchEvent(new CustomEvent('startGame'));
-            startScreen.classList.add('hide');
-            endScreen.classList.add('hide');
-            audio.play();
-        }
-
-        function end() {
-            document.querySelector('video').play();
-            startScreen.classList.add('hide');
-            endScreen.classList.remove('hide');
-        }
-
-        function epic() {
-            audioPrivet.play();
-            document.body.className = 'roizman';
-            setTimeout(function () {
-                document.body.className = '';
-            }, 2200);
-        }
-    </script>
     <script src="./bundle.js"></script>
 </body>
 
