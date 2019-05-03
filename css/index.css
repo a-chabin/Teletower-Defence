@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,500,600,700&subset=cyrillic-ext');
 
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
@@ -27,18 +26,30 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 
+
+::selection {
+    background: #41922d;
+    color: #fff;
+}
+
+::-moz-selection {
+    background: #41922d;
+    color: #fff;
+}
+
+html {
+    background: rgb(15, 15, 15);
+}
+
 html,
-body,
-article {
-	width: 100%;
-	height: 100%;
+body {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 body {
 	font-family: 'IBM Plex Mono', monospace;
-	position: relative;
-	min-width: 1024px;
-	overflow: hidden;
 }
 
 .roizman {
@@ -46,66 +57,83 @@ body {
     background-size: cover;
 }
 
-article {
-    display: flex;
+.screen {
     position: relative;
-    flex-direction: column;
+	z-index: 2;
+    width: 100%;
+    min-height: 100%;
+    color: #ffffff;
+	font-size: 17px;
+    line-height: 1.8;
+    text-shadow: 1px 2px 0 #000;
+    display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
-    line-height: 1.8;
-	font-size: 18px;
-	text-align: center;
-    background: rgba(0, 0, 0, 0.5);
-	text-shadow: 1px 2px 0 #000;
-	z-index: 2;
 }
 
-article:not(.hide) ~ canvas {
-	filter: blur(3px);
+.screen:not(.hide) ~ .game-container {
+	filter: blur(15px) brightness(.5);
 }
 
-section {
-    max-width: 800px;
-    text-align: left;
+.screen__inner {
+    width: 100%;
+    padding: 0 5%;
+    max-width: 750px;
 }
 
 h1 {
-	font-size: 40px;
 	margin-bottom: 30px;
+	font-size: 40px;
 }
 
 p {
 	margin-bottom: 25px;
 }
 
-.note {
-    font-size: 14px !important;
-    margin: 20px 0 !important;
-    color: #c3c3c3;
+video {
+    width: 100%; 
+    height: 100%;
+    max-width: 800px;
+    max-height: 438px;
 }
 
-canvas {
+.note {
+    margin: 20px 0 !important;
+    color: #c3c3c3;
+    font-size: 14px !important;
+}
+
+.game-container {
+    transition: .4s all ease-in;
 	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	height: 100%;
-    margin: auto;
 	z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    max-width: 1024px;
+    max-height: 650px;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+canvas {
+    position: relative;
 }
 
 button {
 	display: inline-block;
-	outline: none;
     margin: 25px 0 15px;
     padding: 17px 35px;
     border: none;
-    color: white;
-    font: 22px 'IBM Plex Mono', monospace;
+	outline: none;
     background: #317b1e;
     box-shadow: inset 0 -2px #438434, inset -3px -3px #3a8229, inset 3px -3px #5a984b, inset 4px 3px #2b8815, 1px 0 0 3px #0a0a0a21;
+    color: white;
+    font: 22px 'IBM Plex Mono', monospace;
     text-shadow: 1px 2px 0 rgba(0, 0, 0, 0.39);
 }
 
@@ -127,12 +155,30 @@ video {
 	display: none;
 }
 
-::selection {
-    background: #41922d;
-    color: #fff;
+@media (max-width: 992px) {
+    h1 {
+        margin-top: 20px;
+        font-size: 30px;
+    }
+
+    .screen {
+        font-size: 14px;
+        line-height: 1.3;
+    }
+
+    button {
+        margin-top: 40px;
+    }
 }
 
-::-moz-selection {
-    background: #41922d;
-    color: #fff;
+@media (orientation: portrait) {
+    .screen {
+        align-items: flex-start;
+    }
+    
+    .game-container {
+        top: 0;
+        height: auto;
+        transform: translate(-50%, 0%);
+    }
 }
