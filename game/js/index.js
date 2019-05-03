@@ -1,5 +1,4 @@
 // Screens (DOM)
-
 var startScreen = document.getElementById('start-screen'),
     endScreen = document.getElementById('end-screen'),
     audio = new Audio('./audio/karliki.mp3'),
@@ -7,23 +6,6 @@ var startScreen = document.getElementById('start-screen'),
     videoContainer = document.getElementById('video');
 
 document.querySelector('.js-button-start').addEventListener('click', () => start());
-
-function startGame() {
-    isGameStart = true;
-    statictics = new Statictics();
-
-    var waves = [
-        new Wave([Thief, 2], [1000, 2000], 1000),
-        new Wave([Thief, 4], [1000, 2000], 8000),
-        new Wave([Police, 4], [1000, 2000], 8000),
-        new Wave([Thief, 8, Police, 4], [1000, 2000], 8000),
-        new Wave([Boss, 1], [2000, 4000], 8000),
-        new Wave([], [], 16000),
-    ];
-    window.chain = new Chain(waves, -1, 10000, 2);
-
-    timer.start();
-}
 
 function start() {
     document.dispatchEvent(new CustomEvent('startGame'));
@@ -48,7 +30,6 @@ function epic() {
 
 
 // Phaser
-
 var game = new Phaser.Game(1024, 650, Phaser.AUTO, 'gameContainer', null, true, false);
 
 var health = 100,
@@ -133,9 +114,9 @@ var enemies = [];
 var defenders = [];
 
 var guiText = {
-    style: { font: "16px IBM Plex Mono", fontWeight: "500", fill: "#000" },
-    boldStyle: { font: "16px IBM Plex Mono", fontWeight: "700", fill: "#000" },
-    largeStyle: { font: "80px IBM Plex Mono", fontWeight: "700", fill: "#000" },
+    style: { font: "16px IBM Plex Mono", fontWeight: "500", fill: "#fff" },
+    boldStyle: { font: "16px IBM Plex Mono", fontWeight: "700", fill: "#fff" },
+    largeStyle: { font: "80px IBM Plex Mono", fontWeight: "700", fill: "#fff" },
     whiteStyle: { font: "16px IBM Plex Mono", fontWeight: "500", fill: "#fff" },
 }
 
@@ -215,7 +196,6 @@ BasicGame.Boot.prototype =
             game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         },
         preload: function () {
-
             // Да-да, это цены
             game.load.image('buy-1000', './img/buy/buy-1000.png');
             game.load.image('buy-2000', './img/buy/buy-2000.png');
@@ -679,7 +659,24 @@ function Defender(tile) {
 }
 
 
-/* Health */
+function startGame() {
+    isGameStart = true;
+    statictics = new Statictics();
+
+    var waves = [
+        new Wave([Thief, 2], [1000, 2000], 1000),
+        new Wave([Thief, 4], [1000, 2000], 8000),
+        new Wave([Police, 4], [1000, 2000], 8000),
+        new Wave([Thief, 8, Police, 4], [1000, 2000], 8000),
+        new Wave([Boss, 1], [2000, 4000], 8000),
+        new Wave([], [], 16000),
+    ];
+    window.chain = new Chain(waves, -1, 10000, 2);
+
+    timer.start();
+}
+
+
 function hurt(points) {
     var result = health - points;
     health = (result >= 0) ? result : 0;
