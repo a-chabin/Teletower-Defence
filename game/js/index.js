@@ -1,4 +1,6 @@
-var game = new Phaser.Game(1024, 650, Phaser.AUTO, 'test', null, true, false);
+
+var game = new Phaser.Game(1024, 650, Phaser.AUTO, 'gameContainer', null, true, false);
+
 var health = 100,
     score = 2000,
     map = {};
@@ -159,7 +161,11 @@ var healthbarEnemyConfig = {
 };
 BasicGame.Boot.prototype =
 {
+    init: function() {
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    },
     preload: function () {
+
         // Да-да, это цены
         game.load.image('buy-1000', './img/buy/buy-1000.png');
         game.load.image('buy-2000', './img/buy/buy-2000.png');
