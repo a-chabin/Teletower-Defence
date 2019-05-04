@@ -1,6 +1,6 @@
-# Teletower Defence ([Game](https://a-chabin.github.io/teletower-defence/))
+# Teletower Defence ([Game](http://bit.ly/teletower-defence))
 
-<img src="http://dl4.joxi.net/drive/2019/05/02/0024/3828/1625844/44/16cf2b7508.png" width="600px">
+[<img src="http://dl4.joxi.net/drive/2019/05/02/0024/3828/1625844/44/16cf2b7508.png" width="700px">](http://bit.ly/teletower-defence)
 
 Игра в жанре Tower Defence на движке Phaser, посвященная сносу Екатеринбургской Телебашни в марте 2018-го года.
 
