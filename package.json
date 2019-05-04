@@ -4,9 +4,9 @@
   "description": "hello",
   "main": "index.js",
   "scripts": {
-    "start": "npx serve ./build",
-    "build": "npx pnkit sync",
-    "watch": "npm run build && npx pnkit watch"
+    "start": "npm run build && npx serve ./build",
+    "watch": "npm run build && npx pnkit watch",
+    "build": "npx pnkit sync"
   },
   "keywords": [],
   "author": "",
