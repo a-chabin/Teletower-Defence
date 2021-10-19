@@ -1,8 +1,8 @@
-# Teletower Defence
+# Teletower Defense
 
 Игра посвященная сносу Екатеринбургской Телебашни в марте 2018-го года. Разработана [на игровом хакатоне 2018](https://habr.com/ru/company/skbkontur/blog/351898/) с использованием js-движка [Phaser](https://phaser.io/). 
 
-### [Играть](https://bit.ly/teletower-defence)
+### [Играть](https://bit.ly/teletower-defense)
 
 
 ![image](https://user-images.githubusercontent.com/22644149/137258618-ed93a6e6-01ba-43f0-a9af-a267f8fafd26.png) 
